@@ -10,9 +10,27 @@
 		45BE5EB6306F73CB00FB9715 /* SharePlate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharePlate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F0A1B2C3D4E5F60718293A4B /* Exceptions for "SharePlate" folder in "SharePlate" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Domain/Models/.gitkeep,
+				Presentation/ViewModels/.gitkeep,
+				Repositories/CloudKit/.gitkeep,
+				Repositories/Protocols/.gitkeep,
+				Shared/.gitkeep,
+				UseCases/.gitkeep,
+			);
+			target = 45BE5EB5306F73CB00FB9715 /* SharePlate */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		45BE5EB8306F73CB00FB9715 /* SharePlate */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F0A1B2C3D4E5F60718293A4B /* Exceptions for "SharePlate" folder in "SharePlate" target */,
+			);
 			path = SharePlate;
 			sourceTree = "<group>";
 		};
