@@ -1,6 +1,9 @@
 import Foundation
 
 protocol DonationRepository {
+    /// Returns nil when collection has not been recorded for the rescue claim.
+    func donationPickup(forRescueClaimID rescueClaimID: UUID) async throws -> DonationPickup?
+
     /// Creates or updates a completed pickup using its domain ID.
     func saveDonationPickup(_ pickup: DonationPickup) async throws
 
