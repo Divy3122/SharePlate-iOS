@@ -43,6 +43,9 @@ struct ClaimSurplusUseCase {
             throw ClaimSurplusError.surplusAlreadyClaimed
         }
         let now = currentDate()
+        guard plannedPickupAt >= now else {
+            throw ClaimSurplusError.pickupTimeHasPassed
+        }
         guard listing.pickupWindowEnd > now else {
             throw ClaimSurplusError.pickupWindowExpired
         }
