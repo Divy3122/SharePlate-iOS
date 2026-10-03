@@ -16,7 +16,6 @@
 			membershipExceptions = (
 				Presentation/ViewModels/.gitkeep,
 				Repositories/CloudKit/.gitkeep,
-				Repositories/Protocols/.gitkeep,
 				Shared/.gitkeep,
 				UseCases/.gitkeep,
 			);
