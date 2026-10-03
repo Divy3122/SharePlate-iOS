@@ -5,9 +5,52 @@
 	};
 	objectVersion = 77;
 	objects = {
+		AABBCCDD0000000000000001 = { isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SharePlateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AABBCCDD0000000000000002 = { isa = PBXFileSystemSynchronizedRootGroup; path = SharePlateTests; sourceTree = "<group>"; };
+		AABBCCDD0000000000000003 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AABBCCDD0000000000000004 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AABBCCDD0000000000000005 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		AABBCCDD0000000000000006 = { isa = PBXContainerItemProxy; containerPortal = 45BE5EAE306F73CB00FB9715; proxyType = 1; remoteGlobalIDString = 45BE5EB5306F73CB00FB9715; remoteInfo = SharePlate; };
+		AABBCCDD0000000000000007 = { isa = PBXTargetDependency; target = 45BE5EB5306F73CB00FB9715; targetProxy = AABBCCDD0000000000000006; };
+		AABBCCDD0000000000000008 = { isa = PBXNativeTarget; buildConfigurationList = AABBCCDD000000000000000B; buildPhases = (AABBCCDD0000000000000003, AABBCCDD0000000000000004, AABBCCDD0000000000000005,); buildRules = (); dependencies = (AABBCCDD0000000000000007,); fileSystemSynchronizedGroups = (AABBCCDD0000000000000002,); name = SharePlateTests; productName = SharePlateTests; productReference = AABBCCDD0000000000000001; productType = "com.apple.product-type.bundle.unit-test"; };
+		AABBCCDD0000000000000009 = { isa = XCBuildConfiguration; buildSettings = {
+ BUNDLE_LOADER = "$(TEST_HOST)";
+ CODE_SIGN_STYLE = Automatic;
+ GENERATE_INFOPLIST_FILE = YES;
+ PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
+ PRODUCT_NAME = "$(TARGET_NAME)";
+ SWIFT_VERSION = 5.0;
+ SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+ TARGETED_DEVICE_FAMILY = "1,2";
+ TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SharePlate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SharePlate";
+ }; name = Debug; };
+		AABBCCDD000000000000000A = { isa = XCBuildConfiguration; buildSettings = {
+ BUNDLE_LOADER = "$(TEST_HOST)";
+ CODE_SIGN_STYLE = Automatic;
+ GENERATE_INFOPLIST_FILE = YES;
+ PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
+ PRODUCT_NAME = "$(TARGET_NAME)";
+ SWIFT_VERSION = 5.0;
+ SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+ TARGETED_DEVICE_FAMILY = "1,2";
+ TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SharePlate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SharePlate";
+ }; name = Release; };
+		AABBCCDD000000000000000B = { isa = XCConfigurationList; buildConfigurations = (AABBCCDD0000000000000009, AABBCCDD000000000000000A,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+
+
+/* Begin PBXContainerItemProxy section */
+		AABBCCDD0000000000000006 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45BE5EAE306F73CB00FB9715 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45BE5EB5306F73CB00FB9715;
+			remoteInfo = SharePlate;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		45BE5EB6306F73CB00FB9715 /* SharePlate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharePlate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AABBCCDD0000000000000001 /* SharePlateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SharePlateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -31,10 +74,22 @@
 			path = SharePlate;
 			sourceTree = "<group>";
 		};
+		AABBCCDD0000000000000002 /* SharePlateTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = SharePlateTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		45BE5EB3306F73CB00FB9715 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AABBCCDD0000000000000004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -48,6 +103,7 @@
 			isa = PBXGroup;
 			children = (
 				45BE5EB8306F73CB00FB9715 /* SharePlate */,
+				AABBCCDD0000000000000002 /* SharePlateTests */,
 				45BE5EB7306F73CB00FB9715 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -56,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				45BE5EB6306F73CB00FB9715 /* SharePlate.app */,
+				AABBCCDD0000000000000001 /* SharePlateTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -84,6 +141,27 @@
 			productName = SharePlate;
 			productReference = 45BE5EB6306F73CB00FB9715 /* SharePlate.app */;
 			productType = "com.apple.product-type.application";
+		};
+		AABBCCDD0000000000000008 /* SharePlateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AABBCCDD000000000000000B /* Build configuration list for PBXNativeTarget "SharePlateTests" */;
+			buildPhases = (
+				AABBCCDD0000000000000003 /* Sources */,
+				AABBCCDD0000000000000004 /* Frameworks */,
+				AABBCCDD0000000000000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AABBCCDD0000000000000007 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AABBCCDD0000000000000002 /* SharePlateTests */,
+			);
+			name = SharePlateTests;
+			productName = SharePlateTests;
+			productReference = AABBCCDD0000000000000001 /* SharePlateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -114,6 +192,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				AABBCCDD0000000000000008 /* SharePlateTests */,
 				45BE5EB5306F73CB00FB9715 /* SharePlate */,
 			);
 		};
@@ -121,6 +200,13 @@
 
 /* Begin PBXResourcesBuildPhase section */
 		45BE5EB4306F73CB00FB9715 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AABBCCDD0000000000000005 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -137,7 +223,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		AABBCCDD0000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AABBCCDD0000000000000007 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45BE5EB5306F73CB00FB9715 /* SharePlate */;
+			targetProxy = AABBCCDD0000000000000006 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		45BE5EBF306F73CD00FB9715 /* Debug */ = {
@@ -321,6 +422,36 @@
 			};
 			name = Release;
 		};
+		AABBCCDD0000000000000009 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SharePlate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SharePlate";
+			};
+			name = Debug;
+		};
+		AABBCCDD000000000000000A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SharePlate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SharePlate";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -338,6 +469,15 @@
 			buildConfigurations = (
 				45BE5EC2306F73CD00FB9715 /* Debug */,
 				45BE5EC3306F73CD00FB9715 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AABBCCDD000000000000000B /* Build configuration list for PBXNativeTarget "SharePlateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AABBCCDD0000000000000009 /* Debug */,
+				AABBCCDD000000000000000A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
