@@ -4,7 +4,11 @@ struct ContentView: View {
     @State private var showEstimateSurplus = false
     @State private var todaySurplusListing: SurplusListing?
 
-    private let foodBusinessID = UUID()
+    @State private var foodBusinessID = UUID()
+#if DEBUG
+    @State private var showFinaliseSurplus = false
+    @State private var developmentRepository = DevelopmentSurplusRepository()
+#endif
 
     var body: some View {
         NavigationStack {
@@ -12,7 +16,8 @@ struct ContentView: View {
                 surplusListing: todaySurplusListing,
                 onEstimateSurplus: {
                     showEstimateSurplus = true
-                }
+                },
+                onFinaliseSurplus: finaliseAction
             )
             .navigationDestination(
                 isPresented: $showEstimateSurplus
@@ -20,6 +25,7 @@ struct ContentView: View {
 #if DEBUG
                 EstimateSurplusDevelopmentScreen(
                     foodBusinessID: foodBusinessID,
+                    repository: developmentRepository,
                     onSaved: { listing in
                         todaySurplusListing = listing
                         showEstimateSurplus = false
@@ -27,7 +33,31 @@ struct ContentView: View {
                 )
 #endif
             }
+#if DEBUG
+            .navigationDestination(isPresented: $showFinaliseSurplus) {
+                if let listing = todaySurplusListing {
+                    FinaliseSurplusView(
+                        listing: listing,
+                        viewModel: FinaliseSurplusViewModel(
+                            useCase: FinaliseSurplusListingUseCase(surplusRepository: developmentRepository)
+                        ),
+                        onFinalised: { finalisedListing in
+                            todaySurplusListing = finalisedListing
+                            showFinaliseSurplus = false
+                        }
+                    )
+                }
+            }
+#endif
         }
+    }
+
+    private var finaliseAction: (() -> Void)? {
+#if DEBUG
+        return { showFinaliseSurplus = true }
+#else
+        return nil
+#endif
     }
 }
 
@@ -35,6 +65,7 @@ struct ContentView: View {
 
 private struct EstimateSurplusDevelopmentScreen: View {
     let foodBusinessID: UUID
+    let repository: DevelopmentSurplusRepository
     let onSaved: (SurplusListing) -> Void
 
     var body: some View {
@@ -42,7 +73,7 @@ private struct EstimateSurplusDevelopmentScreen: View {
             foodBusinessID: foodBusinessID,
             viewModel: EstimateSurplusViewModel(
                 estimateSurplusUseCase: EstimateSurplusUseCase(
-                    surplusRepository: DevelopmentSurplusRepository()
+                    surplusRepository: repository
                 )
             ),
             onSaved: onSaved

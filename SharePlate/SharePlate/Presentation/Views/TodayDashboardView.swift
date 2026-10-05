@@ -32,7 +32,7 @@ struct TodayDashboardView: View {
                     if let listing = surplusListing {
                         badge(listing.status)
                         Text(listing.title).font(.title2.bold())
-                        Label("\(listing.items.count) surplus food types", systemImage: "basket")
+                        Label("\(listing.items.count) surplus food \(listing.items.count == 1 ? "type" : "types")", systemImage: "basket")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                         Divider()
