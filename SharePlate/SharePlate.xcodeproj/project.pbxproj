@@ -5,38 +5,6 @@
 	};
 	objectVersion = 77;
 	objects = {
-		AABBCCDD0000000000000001 = { isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SharePlateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		AABBCCDD0000000000000002 = { isa = PBXFileSystemSynchronizedRootGroup; path = SharePlateTests; sourceTree = "<group>"; };
-		AABBCCDD0000000000000003 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		AABBCCDD0000000000000004 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		AABBCCDD0000000000000005 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		AABBCCDD0000000000000006 = { isa = PBXContainerItemProxy; containerPortal = 45BE5EAE306F73CB00FB9715; proxyType = 1; remoteGlobalIDString = 45BE5EB5306F73CB00FB9715; remoteInfo = SharePlate; };
-		AABBCCDD0000000000000007 = { isa = PBXTargetDependency; target = 45BE5EB5306F73CB00FB9715; targetProxy = AABBCCDD0000000000000006; };
-		AABBCCDD0000000000000008 = { isa = PBXNativeTarget; buildConfigurationList = AABBCCDD000000000000000B; buildPhases = (AABBCCDD0000000000000003, AABBCCDD0000000000000004, AABBCCDD0000000000000005,); buildRules = (); dependencies = (AABBCCDD0000000000000007,); fileSystemSynchronizedGroups = (AABBCCDD0000000000000002,); name = SharePlateTests; productName = SharePlateTests; productReference = AABBCCDD0000000000000001; productType = "com.apple.product-type.bundle.unit-test"; };
-		AABBCCDD0000000000000009 = { isa = XCBuildConfiguration; buildSettings = {
- BUNDLE_LOADER = "$(TEST_HOST)";
- CODE_SIGN_STYLE = Automatic;
- GENERATE_INFOPLIST_FILE = YES;
- PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
- PRODUCT_NAME = "$(TARGET_NAME)";
- SWIFT_VERSION = 5.0;
- SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
- TARGETED_DEVICE_FAMILY = "1,2";
- TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SharePlate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SharePlate";
- }; name = Debug; };
-		AABBCCDD000000000000000A = { isa = XCBuildConfiguration; buildSettings = {
- BUNDLE_LOADER = "$(TEST_HOST)";
- CODE_SIGN_STYLE = Automatic;
- GENERATE_INFOPLIST_FILE = YES;
- PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
- PRODUCT_NAME = "$(TARGET_NAME)";
- SWIFT_VERSION = 5.0;
- SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
- TARGETED_DEVICE_FAMILY = "1,2";
- TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SharePlate.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/SharePlate";
- }; name = Release; };
-		AABBCCDD000000000000000B = { isa = XCConfigurationList; buildConfigurations = (AABBCCDD0000000000000009, AABBCCDD000000000000000A,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-
 
 /* Begin PBXContainerItemProxy section */
 		AABBCCDD0000000000000006 /* PBXContainerItemProxy */ = {
