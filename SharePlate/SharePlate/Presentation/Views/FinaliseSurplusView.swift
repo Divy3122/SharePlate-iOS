@@ -27,6 +27,7 @@ struct FinaliseSurplusView: View {
                 card {
                     Text(listing.title).font(.title2.bold())
                     Label("Estimated", systemImage: "pencil.circle")
+                        .foregroundStyle(Color.accentColor)
                         .font(.subheadline.weight(.semibold))
                         .padding(10)
                         .background(Color.accentColor.opacity(0.12), in: RoundedRectangle(cornerRadius: 12))
@@ -91,6 +92,8 @@ struct FinaliseSurplusView: View {
                     .frame(maxWidth: .infinity, minHeight: 44)
                 }
                 .buttonStyle(.borderedProminent)
+                .controlSize(.large)
+                .buttonBorderShape(.roundedRectangle(radius: 16))
                 .tint(.accentColor)
                 .disabled(viewModel.isLoading)
             }
@@ -112,9 +115,16 @@ struct FinaliseSurplusView: View {
     }
 
     private func heading(_ title: String, icon: String) -> some View {
-        Label(title, systemImage: icon)
-            .font(.headline)
-            .accessibilityAddTraits(.isHeader)
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.headline)
+                .foregroundStyle(Color.accentColor)
+                .padding(10)
+                .background(Color.accentColor.opacity(0.12), in: Circle())
+                .accessibilityHidden(true)
+            Text(title).font(.headline)
+        }
+        .accessibilityAddTraits(.isHeader)
     }
 
     private func detail(_ title: String, value: String) -> some View {

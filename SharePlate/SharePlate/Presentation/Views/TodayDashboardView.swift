@@ -15,7 +15,7 @@ struct TodayDashboardView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("SharePlate", systemImage: "leaf")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.teal)
+                        .foregroundStyle(Color.accentColor)
                     Text("Today").font(.largeTitle.bold())
                         .accessibilityAddTraits(.isHeader)
                     if let businessName {
@@ -41,9 +41,9 @@ struct TodayDashboardView: View {
                     } else {
                         Image(systemName: "basket")
                             .font(.title)
-                            .foregroundStyle(.teal)
+                            .foregroundStyle(Color.accentColor)
                             .padding(16)
-                            .background(.teal.opacity(0.10), in: RoundedRectangle(cornerRadius: 18))
+                            .background(Color.accentColor.opacity(0.10), in: RoundedRectangle(cornerRadius: 18))
                             .accessibilityHidden(true)
                         Text("No surplus estimated yet").font(.title2.bold())
                         Text("Start with what you expect to have left. Help good food find a place in your community.")
@@ -73,7 +73,7 @@ struct TodayDashboardView: View {
                                     .frame(maxWidth: .infinity, minHeight: 44)
                             }
                             .buttonStyle(.bordered)
-                            .tint(.teal)
+                            .tint(.accentColor)
                         }
                     }
                 }
@@ -100,9 +100,9 @@ struct TodayDashboardView: View {
         VStack(alignment: .leading, spacing: 16, content: content)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(22)
-            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 24))
+            .background(Color(.secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 20))
             .overlay {
-                RoundedRectangle(cornerRadius: 24)
+                RoundedRectangle(cornerRadius: 20)
                     .strokeBorder(Color.primary.opacity(0.05), lineWidth: 1)
             }
     }
@@ -112,7 +112,7 @@ struct TodayDashboardView: View {
             HStack(alignment: .top, spacing: 14) {
                 Image(systemName: "clock.arrow.circlepath")
                     .font(.title2)
-                    .foregroundStyle(.teal)
+                    .foregroundStyle(Color.accentColor)
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 6) {
                     Text("Donation History").font(.headline)
@@ -157,8 +157,8 @@ struct TodayDashboardView: View {
     private func statusColor(_ status: SurplusListing.Status) -> Color {
         switch status {
         case .estimated: .secondary
-        case .available, .collected: .teal
-        case .claimed: .blue
+        case .available, .collected: .accentColor
+        case .claimed: .accentColor
         case .expired, .cancelled: .secondary
         }
     }
@@ -192,7 +192,7 @@ struct TodayDashboardView: View {
                     .padding(.vertical, 4)
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color(red: 0.08, green: 0.38, blue: 0.33))
+            .tint(.accentColor)
             .buttonBorderShape(.roundedRectangle(radius: 16))
         }
     }

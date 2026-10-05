@@ -238,6 +238,7 @@ struct EstimateSurplusView: View {
         }
         .buttonStyle(.borderedProminent)
         .controlSize(.large)
+        .buttonBorderShape(.roundedRectangle(radius: 16))
         .tint(.accentColor)
         .disabled(viewModel.isLoading)
         .padding(.bottom, 24)
@@ -393,7 +394,7 @@ struct EstimateSurplusView: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.headline)
-                .foregroundStyle(.green)
+                .foregroundStyle(Color.accentColor)
                 .frame(width: 36, height: 36)
                 .background(
                     Circle()
