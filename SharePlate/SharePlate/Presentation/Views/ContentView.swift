@@ -9,12 +9,21 @@ struct ContentView: View {
     init(surplusListing: SurplusListing? = nil, rescueClaim: RescueClaim? = nil) {
         _todaySurplusListing = State(initialValue: surplusListing)
         _rescueClaim = State(initialValue: rescueClaim)
+#if DEBUG
+        _developmentRepository = State(
+            initialValue: DevelopmentSurplusRepository(
+                listing: surplusListing,
+                claim: rescueClaim
+            )
+        )
+#endif
     }
 
     @State private var foodBusinessID = UUID()
 #if DEBUG
     @State private var showFinaliseSurplus = false
-    @State private var developmentRepository = DevelopmentSurplusRepository()
+    @State private var showPickupDetails = false
+    @State private var developmentRepository: DevelopmentSurplusRepository
 #endif
 
     var body: some View {
@@ -45,10 +54,41 @@ struct ContentView: View {
             }
             .navigationDestination(isPresented: $showActiveRescue) {
                 if let listing = todaySurplusListing, let claim = activeClaim {
-                    ActiveRescueView(listing: listing, claim: claim)
+                    ActiveRescueView(
+                        listing: listing,
+                        claim: claim,
+                        onViewPickupDetails: pickupDetailsAction
+                    )
                 }
             }
 #if DEBUG
+            .navigationDestination(isPresented: $showPickupDetails) {
+                if let listing = todaySurplusListing, let claim = activeClaim {
+                    ClaimPickupDetailsView(
+                        listing: listing,
+                        claim: claim,
+                        viewModel: CompleteDonationPickupViewModel(
+                            useCase: CompleteDonationPickupUseCase(
+                                claimRepository: developmentRepository,
+                                donationRepository: developmentRepository,
+                                surplusRepository: developmentRepository
+                            )
+                        ),
+                        onCompleted: { _ in
+                            var collectedListing = listing
+                            collectedListing.status = .collected
+                            todaySurplusListing = collectedListing
+
+                            var collectedClaim = claim
+                            collectedClaim.status = .collected
+                            rescueClaim = collectedClaim
+
+                            showPickupDetails = false
+                            showActiveRescue = false
+                        }
+                    )
+                }
+            }
             .navigationDestination(isPresented: $showFinaliseSurplus) {
                 if let listing = todaySurplusListing {
                     FinaliseSurplusView(
@@ -82,6 +122,14 @@ struct ContentView: View {
         return nil
 #endif
     }
+
+    private var pickupDetailsAction: (() -> Void)? {
+#if DEBUG
+        return { showPickupDetails = true }
+#else
+        return nil
+#endif
+    }
 }
 
 #if DEBUG
@@ -104,8 +152,23 @@ private struct EstimateSurplusDevelopmentScreen: View {
     }
 }
 
-private final class DevelopmentSurplusRepository: SurplusRepository {
+final class DevelopmentSurplusRepository:
+    SurplusRepository,
+    RescueClaimRepository,
+    DonationRepository
+{
     private var listings: [UUID: SurplusListing] = [:]
+    private var claims: [UUID: RescueClaim] = [:]
+    private var pickups: [UUID: DonationPickup] = [:]
+
+    init(listing: SurplusListing? = nil, claim: RescueClaim? = nil) {
+        if let listing {
+            listings[listing.id] = listing
+        }
+        if let claim {
+            claims[claim.id] = claim
+        }
+    }
 
     func saveSurplusListing(
         _ listing: SurplusListing
@@ -134,6 +197,40 @@ private final class DevelopmentSurplusRepository: SurplusRepository {
             $0.status == .available &&
             $0.pickupWindowEnd > date
         }
+    }
+
+    func saveRescueClaim(_ claim: RescueClaim) async throws {
+        claims[claim.id] = claim
+    }
+
+    func rescueClaim(id: UUID) async throws -> RescueClaim? {
+        claims[id]
+    }
+
+    func rescueClaims(forSurplusListingID surplusListingID: UUID) async throws -> [RescueClaim] {
+        claims.values.filter { $0.surplusListingID == surplusListingID }
+    }
+
+    func donationPickup(forRescueClaimID rescueClaimID: UUID) async throws -> DonationPickup? {
+        pickups.values.first { $0.rescueClaimID == rescueClaimID }
+    }
+
+    func saveDonationPickup(_ pickup: DonationPickup) async throws {
+        pickups[pickup.id] = pickup
+    }
+
+    func donationPickups(forFoodBusinessID foodBusinessID: UUID) async throws -> [DonationPickup] {
+        let listingIDs = Set(
+            listings.values
+                .filter { $0.foodBusinessID == foodBusinessID }
+                .map(\.id)
+        )
+        let claimIDs = Set(
+            claims.values
+                .filter { listingIDs.contains($0.surplusListingID) }
+                .map(\.id)
+        )
+        return pickups.values.filter { claimIDs.contains($0.rescueClaimID) }
     }
 }
 
