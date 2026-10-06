@@ -9,6 +9,7 @@ struct ContentView: View {
     init(surplusListing: SurplusListing? = nil, rescueClaim: RescueClaim? = nil) {
         _todaySurplusListing = State(initialValue: surplusListing)
         _rescueClaim = State(initialValue: rescueClaim)
+        _foodBusinessID = State(initialValue: surplusListing?.foodBusinessID ?? UUID())
 #if DEBUG
         _developmentRepository = State(
             initialValue: DevelopmentSurplusRepository(
@@ -19,10 +20,11 @@ struct ContentView: View {
 #endif
     }
 
-    @State private var foodBusinessID = UUID()
+    @State private var foodBusinessID: UUID
 #if DEBUG
     @State private var showFinaliseSurplus = false
     @State private var showPickupDetails = false
+    @State private var showDonationHistory = false
     @State private var developmentRepository: DevelopmentSurplusRepository
 #endif
 
@@ -35,7 +37,8 @@ struct ContentView: View {
                     showEstimateSurplus = true
                 },
                 onFinaliseSurplus: finaliseAction,
-                onViewActiveRescue: activeClaim == nil ? nil : { showActiveRescue = true }
+                onViewActiveRescue: activeClaim == nil ? nil : { showActiveRescue = true },
+                onViewDonationHistory: donationHistoryAction
             )
             .navigationDestination(
                 isPresented: $showEstimateSurplus
@@ -62,6 +65,18 @@ struct ContentView: View {
                 }
             }
 #if DEBUG
+            .navigationDestination(isPresented: $showDonationHistory) {
+                DonationHistoryView(
+                    foodBusinessID: foodBusinessID,
+                    viewModel: DonationHistoryViewModel(
+                        useCase: LoadDonationHistoryUseCase(
+                            donationRepository: developmentRepository,
+                            claimRepository: developmentRepository,
+                            surplusRepository: developmentRepository
+                        )
+                    )
+                )
+            }
             .navigationDestination(isPresented: $showPickupDetails) {
                 if let listing = todaySurplusListing, let claim = activeClaim {
                     ClaimPickupDetailsView(
@@ -130,6 +145,14 @@ struct ContentView: View {
         return nil
 #endif
     }
+
+    private var donationHistoryAction: (() -> Void)? {
+#if DEBUG
+        return { showDonationHistory = true }
+#else
+        return nil
+#endif
+    }
 }
 
 #if DEBUG
@@ -161,12 +184,19 @@ final class DevelopmentSurplusRepository:
     private var claims: [UUID: RescueClaim] = [:]
     private var pickups: [UUID: DonationPickup] = [:]
 
-    init(listing: SurplusListing? = nil, claim: RescueClaim? = nil) {
+    init(
+        listing: SurplusListing? = nil,
+        claim: RescueClaim? = nil,
+        pickup: DonationPickup? = nil
+    ) {
         if let listing {
             listings[listing.id] = listing
         }
         if let claim {
             claims[claim.id] = claim
+        }
+        if let pickup {
+            pickups[pickup.id] = pickup
         }
     }
 
