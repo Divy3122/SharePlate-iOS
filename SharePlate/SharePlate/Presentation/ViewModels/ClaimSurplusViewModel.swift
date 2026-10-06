@@ -15,17 +15,27 @@ final class ClaimSurplusViewModel {
     private(set) var errorMessage: String?
     private(set) var createdClaim: RescueClaim?
 
-    init(useCase: ClaimSurplusUseCase, plannedPickupAt: Date = Date()) {
+    init(
+        useCase: ClaimSurplusUseCase,
+        plannedPickupAt: Date? = nil
+    ) {
         self.useCase = useCase
-        self.plannedPickupAt = plannedPickupAt
+        self.plannedPickupAt = plannedPickupAt ?? Self.nextAvailableMinute()
     }
 
-    func claimSurplus(listingID: UUID, organisationID: UUID) async {
+    func claimSurplus(
+        listingID: UUID,
+        organisationID: UUID
+    ) async {
         guard !isLoading else { return }
+
         errorMessage = nil
         createdClaim = nil
         isLoading = true
-        defer { isLoading = false }
+
+        defer {
+            isLoading = false
+        }
 
         do {
             createdClaim = try await useCase.claimSurplus(
@@ -37,8 +47,26 @@ final class ClaimSurplusViewModel {
                 collectionNotes: collectionNotes
             )
         } catch {
-            errorMessage = (error as? LocalizedError)?.errorDescription
+            errorMessage =
+                (error as? LocalizedError)?.errorDescription
                 ?? "We could not confirm your food claim. Refresh your claims to check whether it was recorded."
         }
+    }
+
+    private static func nextAvailableMinute() -> Date {
+        let now = Date()
+        let calendar = Calendar.current
+
+        let startOfMinute = calendar.date(
+            bySetting: .second,
+            value: 0,
+            of: now
+        ) ?? now
+
+        return calendar.date(
+            byAdding: .minute,
+            value: 1,
+            to: startOfMinute
+        ) ?? now.addingTimeInterval(60)
     }
 }
