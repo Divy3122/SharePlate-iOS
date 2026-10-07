@@ -35,21 +35,18 @@ struct ContentView: View {
     @State private var selectedAvailableListing:
         SurplusListing?
 
-    @State private var communityPickupListing:
-        SurplusListing?
-
-    @State private var communityPickupClaim:
-        RescueClaim?
+    @State private var selectedCommunityPickupActivity:
+        CommunityPickupActivity?
 
     // MARK: - Refresh Tokens
 
     @State private var businessRefreshID = UUID()
     @State private var communityRefreshID = UUID()
 
-    // MARK: - Temporary Repository Composition
+    // MARK: - Repository Composition
 
-    @State private var developmentRepository:
-        DevelopmentSurplusRepository
+    private let repository:
+        any SharePlateRepository
 
     @State private var businessDashboardViewModel:
         BusinessDashboardViewModel
@@ -57,37 +54,23 @@ struct ContentView: View {
     @State private var availableSurplusViewModel:
         AvailableSurplusViewModel
 
+    @State private var communityPickupsViewModel:
+        CommunityPickupsViewModel
+
     private let communityOrganisation:
         CommunityOrganisation
 
+    private let businessName:
+        String
+
     // MARK: - Init
 
-    init(
-        surplusListing: SurplusListing? = nil,
-        rescueClaim: RescueClaim? = nil
-    ) {
-
-        let businessID =
-            surplusListing?.foodBusinessID
-            ?? UUID()
-
+    init(dependencies: SharePlateAppDependencies) {
         _foodBusinessID = State(
-            initialValue: businessID
+            initialValue: dependencies.foodBusiness.id
         )
 
-        let organisation =
-            SharePlateDemo.communityOrganisation
-
-        let repository =
-            DevelopmentSurplusRepository(
-                listing: surplusListing,
-                claim: rescueClaim,
-                organisation: organisation
-            )
-
-        _developmentRepository = State(
-            initialValue: repository
-        )
+        repository = dependencies.repository
 
         _businessDashboardViewModel = State(
             initialValue:
@@ -95,9 +78,9 @@ struct ContentView: View {
                     useCase:
                         LoadBusinessSurplusUseCase(
                             surplusRepository:
-                                repository,
+                                dependencies.repository,
                             claimRepository:
-                                repository
+                                dependencies.repository
                         )
                 )
         )
@@ -108,21 +91,26 @@ struct ContentView: View {
                     useCase:
                         LoadAvailableSurplusUseCase(
                             surplusRepository:
-                                repository
+                                dependencies.repository
                         )
                 )
         )
 
-        _communityPickupListing = State(
-            initialValue: surplusListing
+        _communityPickupsViewModel = State(
+            initialValue:
+                CommunityPickupsViewModel(
+                    useCase:
+                        LoadCommunityPickupsUseCase(
+                            claimRepository:
+                                dependencies.repository,
+                            surplusRepository:
+                                dependencies.repository
+                        )
+                )
         )
 
-        _communityPickupClaim = State(
-            initialValue: rescueClaim
-        )
-
-        communityOrganisation =
-            organisation
+        communityOrganisation = dependencies.communityOrganisation
+        businessName = dependencies.foodBusiness.businessName
     }
 
     // MARK: - Selected Role
@@ -185,11 +173,11 @@ struct ContentView: View {
                     $showEstimateSurplus
             ) {
 
-                EstimateSurplusDevelopmentScreen(
+                EstimateSurplusCompositionScreen(
                     foodBusinessID:
                         foodBusinessID,
                     repository:
-                        developmentRepository,
+                        repository,
                     onSaved: { _ in
 
                         businessRefreshID =
@@ -222,7 +210,7 @@ struct ContentView: View {
                                 useCase:
                                     FinaliseSurplusListingUseCase(
                                         surplusRepository:
-                                            developmentRepository
+                                            repository
                                     )
                             ),
                         onFinalised: {
@@ -292,25 +280,14 @@ struct ContentView: View {
                                 useCase:
                                     CompleteDonationPickupUseCase(
                                         claimRepository:
-                                            developmentRepository,
+                                            repository,
                                         donationRepository:
-                                            developmentRepository,
+                                            repository,
                                         surplusRepository:
-                                            developmentRepository
+                                            repository
                                     )
                             ),
                         onCompleted: { _ in
-
-                            if communityPickupClaim?
-                                .id ==
-                                claim.id {
-
-                                communityPickupClaim =
-                                    nil
-
-                                communityPickupListing =
-                                    nil
-                            }
 
                             selectedBusinessListing =
                                 nil
@@ -349,11 +326,11 @@ struct ContentView: View {
                             useCase:
                                 LoadDonationHistoryUseCase(
                                     donationRepository:
-                                        developmentRepository,
+                                        repository,
                                     claimRepository:
-                                        developmentRepository,
+                                        repository,
                                     surplusRepository:
-                                        developmentRepository
+                                        repository
                                 )
                         )
                 )
@@ -379,11 +356,11 @@ struct ContentView: View {
                                 useCase:
                                     ClaimSurplusUseCase(
                                         surplusRepository:
-                                            developmentRepository,
+                                            repository,
                                         organisationRepository:
-                                            developmentRepository,
+                                            repository,
                                         claimRepository:
-                                            developmentRepository
+                                            repository
                                     )
                             ),
                         onClaimed:
@@ -399,16 +376,14 @@ struct ContentView: View {
                     $showCommunityPickup
             ) {
 
-                if let listing =
-                    communityPickupListing,
-                   let claim =
-                    communityPickupClaim {
+                if let activity =
+                    selectedCommunityPickupActivity {
 
                     CommunityPickupView(
                         listing:
-                            listing,
+                            activity.listing,
                         claim:
-                            claim,
+                            activity.claim,
                         organisation:
                             communityOrganisation
                     )
@@ -427,7 +402,7 @@ struct ContentView: View {
                 foodBusinessID,
 
             businessName:
-                "SharePlate Business",
+                businessName,
 
             viewModel:
                 businessDashboardViewModel,
@@ -481,253 +456,23 @@ struct ContentView: View {
     private var communityDashboard:
         some View {
 
-        VStack(spacing: 0) {
-
-            if let claim =
-                communityPickupClaim,
-               let listing =
-                communityPickupListing,
-               claim.status ==
-                .active {
-
-                communityPickupCard(
-                    listing:
-                        listing,
-                    claim:
-                        claim
-                )
+        CommunityHomeView(
+            communityOrganisationID:
+                communityOrganisation.id,
+            pickupsViewModel:
+                communityPickupsViewModel,
+            availableSurplusViewModel:
+                availableSurplusViewModel,
+            refreshID:
+                communityRefreshID,
+            onSelectPickup: { activity in
+                selectedCommunityPickupActivity = activity
+                showCommunityPickup = true
+            },
+            onSelectListing: { listing in
+                selectedAvailableListing = listing
+                showClaimSurplus = true
             }
-
-            AvailableSurplusView(
-                viewModel:
-                    availableSurplusViewModel,
-
-                refreshID:
-                    communityRefreshID,
-
-                onSelectListing: {
-                    listing in
-
-                    selectedAvailableListing =
-                        listing
-
-                    showClaimSurplus =
-                        true
-                }
-            )
-        }
-        .background(
-            Color(
-                .systemGroupedBackground
-            )
-        )
-    }
-
-    // MARK: - Community Pickup Card
-
-    private func communityPickupCard(
-        listing: SurplusListing,
-        claim: RescueClaim
-    ) -> some View {
-
-        Button {
-
-            showCommunityPickup =
-                true
-
-        } label: {
-
-            VStack(
-                alignment: .leading,
-                spacing: 14
-            ) {
-
-                HStack {
-
-                    Label(
-                        "My Pickup",
-                        systemImage:
-                            "shippingbox.fill"
-                    )
-                    .font(.headline)
-                    .foregroundStyle(
-                        Color.accentColor
-                    )
-
-                    Spacer()
-
-                    Image(
-                        systemName:
-                            "chevron.right"
-                    )
-                    .font(
-                        .subheadline
-                            .weight(
-                                .semibold
-                            )
-                    )
-                    .foregroundStyle(
-                        .secondary
-                    )
-                }
-
-                Text(
-                    listing.title
-                )
-                .font(
-                    .title3.bold()
-                )
-                .foregroundStyle(
-                    .primary
-                )
-                .frame(
-                    maxWidth:
-                        .infinity,
-                    alignment:
-                        .leading
-                )
-
-                HStack(
-                    spacing: 8
-                ) {
-
-                    Image(
-                        systemName:
-                            "clock.fill"
-                    )
-                    .foregroundStyle(
-                        Color.accentColor
-                    )
-
-                    Text(
-                        claim
-                            .plannedPickupAt
-                            .formatted(
-                                date:
-                                    .abbreviated,
-                                time:
-                                    .shortened
-                            )
-                    )
-                    .font(
-                        .subheadline
-                            .weight(
-                                .semibold
-                            )
-                    )
-                    .foregroundStyle(
-                        .primary
-                    )
-                }
-
-                HStack(
-                    spacing: 8
-                ) {
-
-                    Image(
-                        systemName:
-                            "mappin.and.ellipse"
-                    )
-                    .foregroundStyle(
-                        Color.accentColor
-                    )
-
-                    Text(
-                        listing
-                            .pickupAddress
-                    )
-                    .font(
-                        .subheadline
-                    )
-                    .foregroundStyle(
-                        .secondary
-                    )
-                    .lineLimit(2)
-                }
-
-                HStack {
-
-                    Text("CLAIMED")
-                        .font(
-                            .caption.bold()
-                        )
-                        .foregroundStyle(
-                            Color.accentColor
-                        )
-                        .padding(
-                            .horizontal,
-                            10
-                        )
-                        .padding(
-                            .vertical,
-                            6
-                        )
-                        .background(
-                            Color
-                                .accentColor
-                                .opacity(
-                                    0.12
-                                ),
-                            in:
-                                Capsule()
-                        )
-
-                    Spacer()
-
-                    Text(
-                        "View pickup"
-                    )
-                    .font(
-                        .subheadline
-                            .weight(
-                                .semibold
-                            )
-                    )
-                    .foregroundStyle(
-                        Color.accentColor
-                    )
-                }
-            }
-            .padding(18)
-            .background(
-                Color(
-                    .secondarySystemGroupedBackground
-                ),
-                in:
-                    RoundedRectangle(
-                        cornerRadius:
-                            20
-                    )
-            )
-            .overlay {
-
-                RoundedRectangle(
-                    cornerRadius: 20
-                )
-                .stroke(
-                    Color
-                        .accentColor
-                        .opacity(
-                            0.18
-                        ),
-                    lineWidth: 1
-                )
-            }
-            .padding(
-                .horizontal,
-                20
-            )
-            .padding(
-                .top,
-                16
-            )
-            .padding(
-                .bottom,
-                10
-            )
-        }
-        .buttonStyle(
-            .plain
         )
     }
 
@@ -825,11 +570,17 @@ struct ContentView: View {
         let claimedListing =
             selectedAvailableListing
 
-        communityPickupClaim =
-            claim
+        guard let claimedListing else {
+            showClaimSurplus = false
+            communityRefreshID = UUID()
+            return
+        }
 
-        communityPickupListing =
-            claimedListing
+        selectedCommunityPickupActivity =
+            CommunityPickupActivity(
+                listing: claimedListing,
+                claim: claim
+            )
 
         selectedAvailableListing =
             nil
@@ -860,6 +611,9 @@ struct ContentView: View {
         selectedAvailableListing =
             nil
 
+        selectedCommunityPickupActivity =
+            nil
+
         showEstimateSurplus =
             false
 
@@ -883,42 +637,17 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Demo Profiles
-
-private enum SharePlateDemo {
-
-    static let communityOrganisation =
-        CommunityOrganisation(
-            organisationName:
-                "Inner Sydney Food Relief",
-            suburb:
-                "Ultimo",
-            isVerified:
-                true,
-            contactName:
-                "Alex Morgan",
-            contactPhone:
-                "0400 123 456",
-            contactEmail:
-                "alex@innersydneyfoodrelief.org.au",
-            serviceArea:
-                "Inner Sydney",
-            foodHandlingNotes:
-                "Trained volunteers collect and transport donated food safely."
-        )
-}
-
 // MARK: - Estimate Composition
 
 private struct
-EstimateSurplusDevelopmentScreen:
+EstimateSurplusCompositionScreen:
     View {
 
     let foodBusinessID:
         UUID
 
     let repository:
-        DevelopmentSurplusRepository
+        any SurplusRepository
 
     let onSaved:
         (SurplusListing) -> Void
@@ -944,242 +673,6 @@ EstimateSurplusDevelopmentScreen:
     }
 }
 
-// MARK: - Temporary In-Memory Repository
-
-final class DevelopmentSurplusRepository:
-    SurplusRepository,
-    CommunityOrganisationRepository,
-    RescueClaimRepository,
-    DonationRepository {
-
-    private var listings:
-        [UUID: SurplusListing] = [:]
-
-    private var organisations:
-        [UUID: CommunityOrganisation] = [:]
-
-    private var claims:
-        [UUID: RescueClaim] = [:]
-
-    private var pickups:
-        [UUID: DonationPickup] = [:]
-
-    init(
-        listing:
-            SurplusListing? = nil,
-
-        claim:
-            RescueClaim? = nil,
-
-        pickup:
-            DonationPickup? = nil,
-
-        organisation:
-            CommunityOrganisation? = nil
-    ) {
-
-        if let listing {
-
-            listings[
-                listing.id
-            ] = listing
-        }
-
-        if let claim {
-
-            claims[
-                claim.id
-            ] = claim
-        }
-
-        if let pickup {
-
-            pickups[
-                pickup.id
-            ] = pickup
-        }
-
-        if let organisation {
-
-            organisations[
-                organisation.id
-            ] = organisation
-        }
-    }
-
-    // MARK: SurplusRepository
-
-    func saveSurplusListing(
-        _ listing:
-            SurplusListing
-    ) async throws {
-
-        listings[
-            listing.id
-        ] = listing
-    }
-
-    func surplusListing(
-        id: UUID
-    ) async throws
-        -> SurplusListing? {
-
-        listings[id]
-    }
-
-    func surplusListings(
-        forFoodBusinessID
-            foodBusinessID:
-                UUID
-    ) async throws
-        -> [SurplusListing] {
-
-        listings.values
-            .filter {
-
-                $0.foodBusinessID ==
-                    foodBusinessID
-            }
-    }
-
-    func availableSurplusListings(
-        at date: Date
-    ) async throws
-        -> [SurplusListing] {
-
-        listings.values
-            .filter {
-
-                $0.status ==
-                    .available
-                &&
-                $0.pickupWindowEnd >
-                    date
-            }
-    }
-
-    // MARK: CommunityOrganisationRepository
-
-    func saveCommunityOrganisation(
-        _ organisation:
-            CommunityOrganisation
-    ) async throws {
-
-        organisations[
-            organisation.id
-        ] = organisation
-    }
-
-    func communityOrganisation(
-        id: UUID
-    ) async throws
-        -> CommunityOrganisation? {
-
-        organisations[id]
-    }
-
-    // MARK: RescueClaimRepository
-
-    func saveRescueClaim(
-        _ claim:
-            RescueClaim
-    ) async throws {
-
-        claims[
-            claim.id
-        ] = claim
-    }
-
-    func rescueClaim(
-        id: UUID
-    ) async throws
-        -> RescueClaim? {
-
-        claims[id]
-    }
-
-    func rescueClaims(
-        forSurplusListingID
-            surplusListingID:
-                UUID
-    ) async throws
-        -> [RescueClaim] {
-
-        claims.values
-            .filter {
-
-                $0.surplusListingID ==
-                    surplusListingID
-            }
-    }
-
-    // MARK: DonationRepository
-
-    func donationPickup(
-        forRescueClaimID
-            rescueClaimID:
-                UUID
-    ) async throws
-        -> DonationPickup? {
-
-        pickups.values
-            .first {
-
-                $0.rescueClaimID ==
-                    rescueClaimID
-            }
-    }
-
-    func saveDonationPickup(
-        _ pickup:
-            DonationPickup
-    ) async throws {
-
-        pickups[
-            pickup.id
-        ] = pickup
-    }
-
-    func donationPickups(
-        forFoodBusinessID
-            foodBusinessID:
-                UUID
-    ) async throws
-        -> [DonationPickup] {
-
-        let listingIDs =
-            Set(
-                listings.values
-                    .filter {
-
-                        $0.foodBusinessID ==
-                            foodBusinessID
-                    }
-                    .map(\.id)
-            )
-
-        let claimIDs =
-            Set(
-                claims.values
-                    .filter {
-
-                        listingIDs.contains(
-                            $0.surplusListingID
-                        )
-                    }
-                    .map(\.id)
-            )
-
-        return pickups.values
-            .filter {
-
-                claimIDs.contains(
-                    $0.rescueClaimID
-                )
-            }
-    }
-}
-
 #Preview {
-    ContentView()
+    ContentView(dependencies: SharePlateAppDependencies())
 }

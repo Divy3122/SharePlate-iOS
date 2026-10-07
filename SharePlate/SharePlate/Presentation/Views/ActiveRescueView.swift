@@ -138,7 +138,6 @@ struct ActiveRescueView: View {
 #if DEBUG
 private struct ActiveRescuePreview: View {
     var includesNotes = false
-    var showsDashboard = false
 
     var body: some View {
         let now = Date()
@@ -157,12 +156,8 @@ private struct ActiveRescuePreview: View {
             collectorPhone: "0400 000 000",
             collectionNotes: includesNotes ? "I will bring reusable crates for the bread." : nil
         )
-        if showsDashboard {
-            ContentView(surplusListing: listing, rescueClaim: claim)
-        } else {
-            NavigationStack {
-                ActiveRescueView(listing: listing, claim: claim)
-            }
+        NavigationStack {
+            ActiveRescueView(listing: listing, claim: claim)
         }
     }
 }
@@ -175,7 +170,4 @@ private struct ActiveRescuePreview: View {
     ActiveRescuePreview(includesNotes: true)
 }
 
-#Preview("Dashboard to active rescue") {
-    ActiveRescuePreview(includesNotes: true, showsDashboard: true)
-}
 #endif

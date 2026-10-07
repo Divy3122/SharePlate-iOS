@@ -25,7 +25,6 @@
 		F0A1B2C3D4E5F60718293A4B /* Exceptions for "SharePlate" folder in "SharePlate" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Repositories/CloudKit/.gitkeep,
 				Shared/.gitkeep,
 			);
 			target = 45BE5EB5306F73CB00FB9715 /* SharePlate */;

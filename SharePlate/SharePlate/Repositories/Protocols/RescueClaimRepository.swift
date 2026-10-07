@@ -9,4 +9,9 @@ protocol RescueClaimRepository {
 
     /// Returns all claims for the listing, including cancelled claims.
     func rescueClaims(forSurplusListingID surplusListingID: UUID) async throws -> [RescueClaim]
+
+    /// Returns all claims made by the community organisation, including completed and cancelled claims.
+    func rescueClaims(
+        forCommunityOrganisationID communityOrganisationID: UUID
+    ) async throws -> [RescueClaim]
 }

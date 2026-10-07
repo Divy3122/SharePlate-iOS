@@ -59,6 +59,12 @@ final class MockRescueClaimRepository: RescueClaimRepository {
     func rescueClaims(forSurplusListingID surplusListingID: UUID) async throws -> [RescueClaim] {
         claims.filter { $0.surplusListingID == surplusListingID }
     }
+
+    func rescueClaims(
+        forCommunityOrganisationID communityOrganisationID: UUID
+    ) async throws -> [RescueClaim] {
+        claims.filter { $0.communityOrganisationID == communityOrganisationID }
+    }
 }
 
 @MainActor

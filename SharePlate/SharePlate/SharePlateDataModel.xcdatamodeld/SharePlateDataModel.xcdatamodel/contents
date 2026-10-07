@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="26000" systemVersion="25A" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FoodBusinessEntity" representedClassName="NSManagedObject" syncable="YES">
+        <attribute name="businessName" optional="NO" attributeType="String"/>
+        <attribute name="contactEmail" optional="YES" attributeType="String"/>
+        <attribute name="contactName" optional="NO" attributeType="String"/>
+        <attribute name="contactPhone" optional="NO" attributeType="String"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="pickupAddress" optional="NO" attributeType="String"/>
+        <attribute name="pickupInstructions" optional="YES" attributeType="String"/>
+        <attribute name="suburb" optional="NO" attributeType="String"/>
+        <relationship name="surplusListings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SurplusListingEntity" inverseName="foodBusiness" inverseEntity="SurplusListingEntity"/>
+    </entity>
+    <entity name="CommunityOrganisationEntity" representedClassName="NSManagedObject" syncable="YES">
+        <attribute name="contactEmail" optional="YES" attributeType="String"/>
+        <attribute name="contactName" optional="NO" attributeType="String"/>
+        <attribute name="contactPhone" optional="NO" attributeType="String"/>
+        <attribute name="foodHandlingNotes" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isVerified" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="organisationName" optional="NO" attributeType="String"/>
+        <attribute name="serviceArea" optional="NO" attributeType="String"/>
+        <attribute name="suburb" optional="NO" attributeType="String"/>
+        <relationship name="rescueClaims" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="RescueClaimEntity" inverseName="communityOrganisation" inverseEntity="RescueClaimEntity"/>
+    </entity>
+    <entity name="SurplusListingEntity" representedClassName="NSManagedObject" syncable="YES">
+        <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="finalisedAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="foodBusinessID" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="pickupAddress" optional="NO" attributeType="String"/>
+        <attribute name="pickupInstructions" optional="YES" attributeType="String"/>
+        <attribute name="pickupWindowEnd" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="pickupWindowStart" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" optional="NO" attributeType="String"/>
+        <attribute name="title" optional="NO" attributeType="String"/>
+        <relationship name="foodBusiness" optional="NO" maxCount="1" deletionRule="Nullify" destinationEntity="FoodBusinessEntity" inverseName="surplusListings" inverseEntity="FoodBusinessEntity"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SurplusItemEntity" inverseName="listing" inverseEntity="SurplusItemEntity"/>
+        <relationship name="rescueClaims" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="RescueClaimEntity" inverseName="surplusListing" inverseEntity="RescueClaimEntity"/>
+    </entity>
+    <entity name="SurplusItemEntity" representedClassName="NSManagedObject" syncable="YES">
+        <attribute name="allergenInformation" optional="YES" attributeType="String"/>
+        <attribute name="foodDescription" optional="YES" attributeType="String"/>
+        <attribute name="foodName" optional="NO" attributeType="String"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="quantity" optional="NO" attributeType="Decimal" defaultValueString="0"/>
+        <attribute name="quantityUnit" optional="NO" attributeType="String"/>
+        <attribute name="sortIndex" optional="NO" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="storageRequirement" optional="NO" attributeType="String"/>
+        <attribute name="useByDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="listing" optional="NO" maxCount="1" deletionRule="Nullify" destinationEntity="SurplusListingEntity" inverseName="items" inverseEntity="SurplusListingEntity"/>
+    </entity>
+    <entity name="RescueClaimEntity" representedClassName="NSManagedObject" syncable="YES">
+        <attribute name="claimedAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="collectionNotes" optional="YES" attributeType="String"/>
+        <attribute name="collectorName" optional="NO" attributeType="String"/>
+        <attribute name="collectorPhone" optional="NO" attributeType="String"/>
+        <attribute name="communityOrganisationID" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="plannedPickupAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="status" optional="NO" attributeType="String"/>
+        <attribute name="surplusListingID" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="communityOrganisation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CommunityOrganisationEntity" inverseName="rescueClaims" inverseEntity="CommunityOrganisationEntity"/>
+        <relationship name="donationPickup" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="DonationPickupEntity" inverseName="rescueClaim" inverseEntity="DonationPickupEntity"/>
+        <relationship name="surplusListing" optional="NO" maxCount="1" deletionRule="Nullify" destinationEntity="SurplusListingEntity" inverseName="rescueClaims" inverseEntity="SurplusListingEntity"/>
+    </entity>
+    <entity name="DonationPickupEntity" representedClassName="NSManagedObject" syncable="YES">
+        <attribute name="collectedAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="handoverNotes" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="rescueClaimID" optional="NO" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="rescueClaim" optional="NO" maxCount="1" deletionRule="Nullify" destinationEntity="RescueClaimEntity" inverseName="donationPickup" inverseEntity="RescueClaimEntity"/>
+    </entity>
+</model>
