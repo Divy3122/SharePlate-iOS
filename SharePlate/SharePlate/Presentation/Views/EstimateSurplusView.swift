@@ -139,9 +139,8 @@ struct EstimateSurplusView: View {
                             Text("Pickup address")
                                 .font(.subheadline.weight(.semibold))
 
-                            TextField(
-                                "Enter pickup address",
-                                text: $viewModel.pickupAddress
+                            AddressAutocompleteField(
+                                address: $viewModel.pickupAddress
                             )
                             .textFieldStyle(.roundedBorder)
                         }

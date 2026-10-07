@@ -4,69 +4,68 @@ import Observation
 @MainActor
 @Observable
 final class ClaimSurplusViewModel {
-    private let useCase: ClaimSurplusUseCase
 
-    var plannedPickupAt: Date
-    var collectorName = ""
-    var collectorPhone = ""
-    var collectionNotes: String?
+    private let useCase:
+        ClaimSurplusUseCase
 
-    private(set) var isLoading = false
-    private(set) var errorMessage: String?
-    private(set) var createdClaim: RescueClaim?
+    var claimedClaim:
+        RescueClaim?
+
+    var isLoading = false
+
+    var errorMessage:
+        String?
 
     init(
-        useCase: ClaimSurplusUseCase,
-        plannedPickupAt: Date? = nil
+        useCase:
+            ClaimSurplusUseCase
     ) {
-        self.useCase = useCase
-        self.plannedPickupAt = plannedPickupAt ?? Self.nextAvailableMinute()
+        self.useCase =
+            useCase
     }
 
     func claimSurplus(
-        listingID: UUID,
-        organisationID: UUID
+        surplusListingID: UUID,
+        communityOrganisationID: UUID,
+        plannedPickupAt: Date,
+        collectorName: String,
+        collectorPhone: String,
+        collectionNotes: String?
     ) async {
-        guard !isLoading else { return }
 
-        errorMessage = nil
-        createdClaim = nil
+        guard !isLoading else {
+            return
+        }
+
         isLoading = true
+        errorMessage = nil
+        claimedClaim = nil
 
         defer {
             isLoading = false
         }
 
         do {
-            createdClaim = try await useCase.claimSurplus(
-                surplusListingID: listingID,
-                communityOrganisationID: organisationID,
-                plannedPickupAt: plannedPickupAt,
-                collectorName: collectorName,
-                collectorPhone: collectorPhone,
-                collectionNotes: collectionNotes
-            )
+            claimedClaim =
+                try await useCase
+                    .claimSurplus(
+                        surplusListingID:
+                            surplusListingID,
+                        communityOrganisationID:
+                            communityOrganisationID,
+                        plannedPickupAt:
+                            plannedPickupAt,
+                        collectorName:
+                            collectorName,
+                        collectorPhone:
+                            collectorPhone,
+                        collectionNotes:
+                            collectionNotes
+                    )
+
         } catch {
             errorMessage =
-                (error as? LocalizedError)?.errorDescription
-                ?? "We could not confirm your food claim. Refresh your claims to check whether it was recorded."
+                error.localizedDescription
         }
-    }
-
-    private static func nextAvailableMinute() -> Date {
-        let now = Date()
-        let calendar = Calendar.current
-
-        let startOfMinute = calendar.date(
-            bySetting: .second,
-            value: 0,
-            of: now
-        ) ?? now
-
-        return calendar.date(
-            byAdding: .minute,
-            value: 1,
-            to: startOfMinute
-        ) ?? now.addingTimeInterval(60)
     }
 }

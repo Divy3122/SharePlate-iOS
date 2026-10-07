@@ -7,75 +7,104 @@ struct ClaimSurplusView: View {
 
     @State private var viewModel: ClaimSurplusViewModel
 
+    @State private var plannedPickupAt: Date
+    @State private var collectorName = ""
+    @State private var collectorPhone = ""
+    @State private var collectionNotes = ""
+
     init(
         listing: SurplusListing,
         organisation: CommunityOrganisation,
         viewModel: ClaimSurplusViewModel,
-        onClaimed: ((RescueClaim) -> Void)? = nil,
-        currentDate: Date = Date()
+        onClaimed: ((RescueClaim) -> Void)? = nil
     ) {
         self.listing = listing
         self.organisation = organisation
         self.onClaimed = onClaimed
 
-        // Start at the next full minute so the selected pickup time
-        // does not become "past" while the user fills in the form.
-        let calendar = Calendar.current
+        _viewModel = State(
+            initialValue: viewModel
+        )
 
-        let startOfCurrentMinute = calendar.date(
-            bySetting: .second,
-            value: 0,
-            of: currentDate
-        ) ?? currentDate
-
-        let nextMinute = calendar.date(
-            byAdding: .minute,
-            value: 1,
-            to: startOfCurrentMinute
-        ) ?? currentDate.addingTimeInterval(60)
+        let now = Date()
 
         let initialPickupTime = min(
-            max(nextMinute, listing.pickupWindowStart),
+            max(
+                now,
+                listing.pickupWindowStart
+            ),
             listing.pickupWindowEnd
         )
 
-        viewModel.plannedPickupAt = initialPickupTime
-
-        _viewModel = State(initialValue: viewModel)
+        _plannedPickupAt = State(
+            initialValue: initialPickupTime
+        )
     }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
+            VStack(
+                alignment: .leading,
+                spacing: 20
+            ) {
 
-                // MARK: - Introduction
+                // MARK: - Header
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Arrange a community collection")
+                VStack(
+                    alignment: .leading,
+                    spacing: 8
+                ) {
+                    Text("Claim this surplus")
                         .font(.title2.bold())
 
                     Text(
-                        "Review the food and tell the business who will collect it."
+                        "Check the food, pickup location and collection window before reserving it."
                     )
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 }
 
-                // MARK: - Surplus
+                // MARK: - Surplus Summary
 
                 card {
-                    heading(
-                        "Surplus available",
-                        icon: "basket"
-                    )
+                    HStack {
+                        VStack(
+                            alignment: .leading,
+                            spacing: 6
+                        ) {
+                            Text(listing.title)
+                                .font(.title2.bold())
 
-                    Text(listing.title)
-                        .font(.title2.bold())
+                            Label(
+                                "Available",
+                                systemImage:
+                                    "checkmark.circle.fill"
+                            )
+                            .font(
+                                .subheadline
+                                    .weight(.semibold)
+                            )
+                            .foregroundStyle(.green)
+                        }
+
+                        Spacer()
+                    }
+
+                    Divider()
+
+                    let itemCount =
+                        listing.items.count
+
+                    Text(
+                        "\(itemCount) surplus food \(itemCount == 1 ? "type" : "types")"
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
 
                     ForEach(listing.items) { item in
                         VStack(
                             alignment: .leading,
-                            spacing: 5
+                            spacing: 4
                         ) {
                             Text(item.foodName)
                                 .font(.headline)
@@ -83,28 +112,37 @@ struct ClaimSurplusView: View {
                             Text(
                                 "\(item.quantity.formatted()) \(unitDescription(item))"
                             )
+                            .font(.subheadline)
 
                             Text(
                                 storageDescription(
                                     item.storageRequirement
                                 )
                             )
-                            .font(.subheadline)
+                            .font(.caption)
                             .foregroundStyle(.secondary)
                         }
                         .frame(
                             maxWidth: .infinity,
                             alignment: .leading
                         )
+                        .padding(.vertical, 4)
                     }
                 }
 
-                // MARK: - Collection Location
+                // MARK: - MAP BEFORE CLAIMING
+
+                PickupMapView(
+                    title: listing.title,
+                    address: listing.pickupAddress
+                )
+
+                // MARK: - Pickup Details
 
                 card {
                     heading(
-                        "Collection location",
-                        icon: "mappin.and.ellipse"
+                        "Collection details",
+                        icon: "clock"
                     )
 
                     detail(
@@ -112,8 +150,10 @@ struct ClaimSurplusView: View {
                         value: listing.pickupAddress
                     )
 
-                    if let instructions = listing.pickupInstructions,
+                    if let instructions =
+                        listing.pickupInstructions,
                        !instructions.isEmpty {
+
                         detail(
                             "Pickup instructions",
                             value: instructions
@@ -123,68 +163,167 @@ struct ClaimSurplusView: View {
                     Divider()
 
                     detail(
-                        "Pickup window",
+                        "Available from",
                         value:
-                            "\(listing.pickupWindowStart.formatted(date: .abbreviated, time: .shortened)) – \(listing.pickupWindowEnd.formatted(date: .abbreviated, time: .shortened))"
+                            listing.pickupWindowStart
+                                .formatted(
+                                    date: .abbreviated,
+                                    time: .shortened
+                                )
+                    )
+
+                    detail(
+                        "Available until",
+                        value:
+                            listing.pickupWindowEnd
+                                .formatted(
+                                    date: .abbreviated,
+                                    time: .shortened
+                                )
                     )
                 }
 
-                // MARK: - Collector Details
+                // MARK: - Pickup Time
+
+                card {
+                    heading(
+                        "Plan your pickup",
+                        icon: "calendar.badge.clock"
+                    )
+
+                    Text(
+                        "Choose when your collector plans to arrive."
+                    )
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+
+                    DatePicker(
+                        "Pickup time",
+                        selection: $plannedPickupAt,
+                        in:
+                            listing.pickupWindowStart
+                            ...
+                            listing.pickupWindowEnd,
+                        displayedComponents: [
+                            .date,
+                            .hourAndMinute
+                        ]
+                    )
+                }
+
+                // MARK: - Collector
 
                 card {
                     heading(
                         "Collector details",
-                        icon: "person.fill"
+                        icon: "person"
                     )
 
-                    DatePicker(
-                        "Planned pickup",
-                        selection: $viewModel.plannedPickupAt,
-                        in: listing.pickupWindowStart...listing.pickupWindowEnd
-                    )
-                    .datePickerStyle(.compact)
-                    .tint(.accentColor)
+                    VStack(
+                        alignment: .leading,
+                        spacing: 6
+                    ) {
+                        Text("Collector name")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
 
-                    Divider()
+                        TextField(
+                            "e.g. Alex Morgan",
+                            text: $collectorName
+                        )
+                        .textContentType(.name)
+                        .padding(12)
+                        .background(
+                            Color(
+                                .tertiarySystemGroupedBackground
+                            ),
+                            in: RoundedRectangle(
+                                cornerRadius: 12
+                            )
+                        )
+                    }
 
-                    TextField(
-                        "Collector name",
-                        text: $viewModel.collectorName
-                    )
-                    .textContentType(.name)
-                    .textFieldStyle(.roundedBorder)
+                    VStack(
+                        alignment: .leading,
+                        spacing: 6
+                    ) {
+                        Text("Phone number")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
 
-                    TextField(
-                        "Collector phone",
-                        text: $viewModel.collectorPhone
-                    )
-                    .textContentType(.telephoneNumber)
-                    .keyboardType(.phonePad)
-                    .textFieldStyle(.roundedBorder)
+                        TextField(
+                            "e.g. 0400 000 000",
+                            text: $collectorPhone
+                        )
+                        .keyboardType(.phonePad)
+                        .textContentType(
+                            .telephoneNumber
+                        )
+                        .padding(12)
+                        .background(
+                            Color(
+                                .tertiarySystemGroupedBackground
+                            ),
+                            in: RoundedRectangle(
+                                cornerRadius: 12
+                            )
+                        )
+                    }
 
-                    TextField(
-                        "Collection notes (optional)",
-                        text: collectionNotesBinding,
-                        axis: .vertical
-                    )
-                    .lineLimit(3...6)
-                    .textFieldStyle(.roundedBorder)
+                    VStack(
+                        alignment: .leading,
+                        spacing: 6
+                    ) {
+                        Text(
+                            "Collection notes (optional)"
+                        )
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                        TextField(
+                            "e.g. Bringing reusable crates",
+                            text: $collectionNotes,
+                            axis: .vertical
+                        )
+                        .lineLimit(2...5)
+                        .padding(12)
+                        .background(
+                            Color(
+                                .tertiarySystemGroupedBackground
+                            ),
+                            in: RoundedRectangle(
+                                cornerRadius: 12
+                            )
+                        )
+                    }
                 }
+
+                // MARK: - Explanation
+
+                Label(
+                    "The surplus will be reserved for your organisation after you claim it.",
+                    systemImage: "info.circle"
+                )
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
 
                 // MARK: - Error
 
-                if let errorMessage = viewModel.errorMessage {
+                if let errorMessage =
+                    viewModel.errorMessage {
+
                     Label(
                         errorMessage,
-                        systemImage: "exclamationmark.circle.fill"
+                        systemImage:
+                            "exclamationmark.circle.fill"
                     )
                     .font(.subheadline)
                     .foregroundStyle(.red)
+                    .padding(16)
                     .frame(
                         maxWidth: .infinity,
                         alignment: .leading
                     )
-                    .padding(16)
                     .background(
                         Color.red.opacity(0.08),
                         in: RoundedRectangle(
@@ -193,30 +332,26 @@ struct ClaimSurplusView: View {
                     )
                 }
 
-                // MARK: - Claim Action
+                // MARK: - Claim Button
 
                 Button {
-                    Task {
-                        await viewModel.claimSurplus(
-                            listingID: listing.id,
-                            organisationID: organisation.id
-                        )
-
-                        if let claim = viewModel.createdClaim {
-                            onClaimed?(claim)
-                        }
-                    }
+                    claimSurplus()
                 } label: {
                     HStack {
                         if viewModel.isLoading {
                             ProgressView()
                                 .tint(.white)
+                        } else {
+                            Image(
+                                systemName:
+                                    "hand.raised.fill"
+                            )
                         }
 
                         Text(
                             viewModel.isLoading
-                            ? "Claiming Surplus…"
-                            : "Claim Surplus"
+                                ? "Claiming Surplus…"
+                                : "Claim Surplus"
                         )
                         .fontWeight(.semibold)
                     }
@@ -228,10 +363,25 @@ struct ClaimSurplusView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .buttonBorderShape(
-                    .roundedRectangle(radius: 16)
+                    .roundedRectangle(
+                        radius: 16
+                    )
                 )
-                .tint(.accentColor)
-                .disabled(viewModel.isLoading)
+                .disabled(
+                    viewModel.isLoading ||
+                    collectorName
+                        .trimmingCharacters(
+                            in:
+                                .whitespacesAndNewlines
+                        )
+                        .isEmpty ||
+                    collectorPhone
+                        .trimmingCharacters(
+                            in:
+                                .whitespacesAndNewlines
+                        )
+                        .isEmpty
+                )
             }
             .frame(maxWidth: 620)
             .padding(20)
@@ -244,25 +394,60 @@ struct ClaimSurplusView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    // MARK: - Bindings
+    // MARK: - Claim
 
-    private var collectionNotesBinding: Binding<String> {
-        Binding(
-            get: {
-                viewModel.collectionNotes ?? ""
-            },
-            set: {
-                viewModel.collectionNotes =
-                    $0.isEmpty ? nil : $0
+    private func claimSurplus() {
+        let cleanName =
+            collectorName
+                .trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+
+        let cleanPhone =
+            collectorPhone
+                .trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+
+        let cleanNotes =
+            collectionNotes
+                .trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+
+        Task {
+            await viewModel.claimSurplus(
+                surplusListingID:
+                    listing.id,
+                communityOrganisationID:
+                    organisation.id,
+                plannedPickupAt:
+                    plannedPickupAt,
+                collectorName:
+                    cleanName,
+                collectorPhone:
+                    cleanPhone,
+                collectionNotes:
+                    cleanNotes.isEmpty
+                        ? nil
+                        : cleanNotes
+            )
+
+            if let claim =
+                viewModel.claimedClaim {
+
+                onClaimed?(claim)
             }
-        )
+        }
     }
 
-    // MARK: - UI Helpers
+    // MARK: - Cards
 
     private func card<Content: View>(
-        @ViewBuilder content: () -> Content
+        @ViewBuilder
+        content: () -> Content
     ) -> some View {
+
         VStack(
             alignment: .leading,
             spacing: 16,
@@ -274,7 +459,9 @@ struct ClaimSurplusView: View {
         )
         .padding(20)
         .background(
-            Color(.secondarySystemGroupedBackground),
+            Color(
+                .secondarySystemGroupedBackground
+            ),
             in: RoundedRectangle(
                 cornerRadius: 20
             )
@@ -285,6 +472,7 @@ struct ClaimSurplusView: View {
         _ title: String,
         icon: String
     ) -> some View {
+
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.headline)
@@ -293,7 +481,8 @@ struct ClaimSurplusView: View {
                 )
                 .padding(10)
                 .background(
-                    Color.accentColor.opacity(0.12),
+                    Color.accentColor
+                        .opacity(0.12),
                     in: Circle()
                 )
                 .accessibilityHidden(true)
@@ -310,6 +499,7 @@ struct ClaimSurplusView: View {
         _ title: String,
         value: String
     ) -> some View {
+
         VStack(
             alignment: .leading,
             spacing: 4
@@ -325,52 +515,57 @@ struct ClaimSurplusView: View {
         }
     }
 
-    // MARK: - Domain Display Helpers
+    // MARK: - Domain Formatting
 
     private func unitDescription(
         _ item: SurplusItem
     ) -> String {
+
         switch item.quantityUnit {
+
         case .pieces:
-            item.quantity == 1
-            ? "piece"
-            : "pieces"
+            return item.quantity == 1
+                ? "piece"
+                : "pieces"
 
         case .portions:
-            item.quantity == 1
-            ? "portion"
-            : "portions"
+            return item.quantity == 1
+                ? "portion"
+                : "portions"
 
         case .packs:
-            item.quantity == 1
-            ? "pack"
-            : "packs"
+            return item.quantity == 1
+                ? "pack"
+                : "packs"
 
         case .trays:
-            item.quantity == 1
-            ? "tray"
-            : "trays"
+            return item.quantity == 1
+                ? "tray"
+                : "trays"
 
         case .kilograms:
-            "kg"
+            return "kg"
 
         case .litres:
-            "L"
+            return "L"
         }
     }
 
     private func storageDescription(
-        _ requirement: SurplusItem.StorageRequirement
+        _ storage:
+            SurplusItem.StorageRequirement
     ) -> String {
-        switch requirement {
+
+        switch storage {
+
         case .ambient:
-            "Room temperature"
+            return "Room temperature"
 
         case .refrigerated:
-            "Refrigerated"
+            return "Refrigerated"
 
         case .frozen:
-            "Frozen"
+            return "Frozen"
         }
     }
 }

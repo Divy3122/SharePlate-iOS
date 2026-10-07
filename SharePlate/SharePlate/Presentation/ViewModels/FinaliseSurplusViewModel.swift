@@ -4,28 +4,62 @@ import Observation
 @MainActor
 @Observable
 final class FinaliseSurplusViewModel {
-    private let useCase: FinaliseSurplusListingUseCase
 
-    private(set) var isLoading = false
-    private(set) var errorMessage: String?
-    private(set) var finalisedListing: SurplusListing?
+    private let useCase:
+        FinaliseSurplusListingUseCase
 
-    init(useCase: FinaliseSurplusListingUseCase) {
-        self.useCase = useCase
+    var finalisedListing:
+        SurplusListing?
+
+    var isLoading =
+        false
+
+    var errorMessage:
+        String?
+
+    init(
+        useCase:
+            FinaliseSurplusListingUseCase
+    ) {
+        self.useCase =
+            useCase
     }
 
-    func finaliseSurplusListing(id: UUID) async {
-        guard !isLoading else { return }
-        errorMessage = nil
-        finalisedListing = nil
-        isLoading = true
-        defer { isLoading = false }
+    func finaliseSurplusListing(
+        id: UUID,
+        pickupAddress: String
+    ) async {
+
+        guard !isLoading else {
+            return
+        }
+
+        isLoading =
+            true
+
+        errorMessage =
+            nil
+
+        finalisedListing =
+            nil
+
+        defer {
+            isLoading =
+                false
+        }
 
         do {
-            finalisedListing = try await useCase.finaliseSurplusListing(id: id)
+            finalisedListing =
+                try await useCase
+                    .finaliseSurplusListing(
+                        id: id,
+                        pickupAddress:
+                            pickupAddress
+                    )
+
         } catch {
-            errorMessage = (error as? LocalizedError)?.errorDescription
-                ?? "We could not confirm that your surplus was finalised. Refresh your listings to check its status."
+            errorMessage =
+                error.localizedDescription
         }
     }
 }

@@ -1,10 +1,3 @@
-//
-//  CommunityPickupView.swift
-//  SharePlate
-//
-//  Created by Divy Patel on 6/10/2026.
-//
-
 import SwiftUI
 
 struct CommunityPickupView: View {
@@ -14,11 +7,18 @@ struct CommunityPickupView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Your pickup is confirmed")
-                        .font(.title2.bold())
+            VStack(
+                alignment: .leading,
+                spacing: 20
+            ) {
+                VStack(
+                    alignment: .leading,
+                    spacing: 8
+                ) {
+                    Text(
+                        "Your pickup is confirmed"
+                    )
+                    .font(.title2.bold())
 
                     Text(
                         "Keep these collection details handy when your team goes to collect the surplus."
@@ -31,6 +31,13 @@ struct CommunityPickupView: View {
 
                 pickupCard
 
+                // Map belongs on COMMUNITY side.
+                PickupMapView(
+                    title: listing.title,
+                    address:
+                        listing.pickupAddress
+                )
+
                 collectorCard
 
                 surplusCard
@@ -39,55 +46,86 @@ struct CommunityPickupView: View {
             .padding(20)
             .frame(maxWidth: .infinity)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(
+            Color(.systemGroupedBackground)
+        )
         .navigationTitle("My Pickup")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarTitleDisplayMode(
+            .inline
+        )
     }
 
-    private var statusCard: some View {
+    // MARK: - Status
+
+    private var statusCard:
+        some View {
+
         card {
             HStack(spacing: 12) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.title2)
-                    .foregroundStyle(Color.accentColor)
-                    .padding(10)
-                    .background(
-                        Color.accentColor.opacity(0.12),
-                        in: Circle()
-                    )
+                Image(
+                    systemName:
+                        "checkmark.circle.fill"
+                )
+                .font(.title2)
+                .foregroundStyle(
+                    Color.accentColor
+                )
+                .padding(10)
+                .background(
+                    Color.accentColor
+                        .opacity(0.12),
+                    in: Circle()
+                )
 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(
+                    alignment: .leading,
+                    spacing: 4
+                ) {
                     Text("Claimed")
                         .font(.headline)
-                        .foregroundStyle(Color.accentColor)
+                        .foregroundStyle(
+                            Color.accentColor
+                        )
 
                     Text(
                         "This surplus is reserved for \(organisation.organisationName)."
                     )
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(
+                        .secondary
+                    )
                 }
             }
         }
     }
 
-    private var pickupCard: some View {
+    // MARK: - Collection
+
+    private var pickupCard:
+        some View {
+
         card {
             heading(
                 "Collection",
                 icon: "clock.fill"
             )
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(
+                alignment: .leading,
+                spacing: 4
+            ) {
                 Text("Planned pickup")
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(
+                        .secondary
+                    )
 
                 Text(
-                    claim.plannedPickupAt.formatted(
-                        date: .abbreviated,
-                        time: .shortened
-                    )
+                    claim.plannedPickupAt
+                        .formatted(
+                            date: .abbreviated,
+                            time: .shortened
+                        )
                 )
                 .font(.title3.bold())
             }
@@ -102,11 +140,14 @@ struct CommunityPickupView: View {
 
             detail(
                 "Pickup address",
-                value: listing.pickupAddress
+                value:
+                    listing.pickupAddress
             )
 
-            if let instructions = listing.pickupInstructions,
+            if let instructions =
+                listing.pickupInstructions,
                !instructions.isEmpty {
+
                 detail(
                     "Pickup instructions",
                     value: instructions
@@ -115,7 +156,11 @@ struct CommunityPickupView: View {
         }
     }
 
-    private var collectorCard: some View {
+    // MARK: - Collector
+
+    private var collectorCard:
+        some View {
+
         card {
             heading(
                 "Collector",
@@ -124,16 +169,20 @@ struct CommunityPickupView: View {
 
             detail(
                 "Collector name",
-                value: claim.collectorName
+                value:
+                    claim.collectorName
             )
 
             detail(
                 "Collector phone",
-                value: claim.collectorPhone
+                value:
+                    claim.collectorPhone
             )
 
-            if let notes = claim.collectionNotes,
+            if let notes =
+                claim.collectionNotes,
                !notes.isEmpty {
+
                 detail(
                     "Collection notes",
                     value: notes
@@ -142,7 +191,11 @@ struct CommunityPickupView: View {
         }
     }
 
-    private var surplusCard: some View {
+    // MARK: - Surplus
+
+    private var surplusCard:
+        some View {
+
         card {
             heading(
                 "Surplus",
@@ -156,12 +209,20 @@ struct CommunityPickupView: View {
                 "\(listing.items.count) surplus food \(listing.items.count == 1 ? "type" : "types")"
             )
             .font(.subheadline)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(
+                .secondary
+            )
 
             Divider()
 
-            ForEach(listing.items) { item in
-                VStack(alignment: .leading, spacing: 4) {
+            ForEach(
+                listing.items
+            ) { item in
+
+                VStack(
+                    alignment: .leading,
+                    spacing: 4
+                ) {
                     Text(item.foodName)
                         .font(.headline)
 
@@ -176,7 +237,9 @@ struct CommunityPickupView: View {
                         )
                     )
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(
+                        .secondary
+                    )
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -186,9 +249,13 @@ struct CommunityPickupView: View {
         }
     }
 
+    // MARK: - UI Helpers
+
     private func card<Content: View>(
-        @ViewBuilder content: () -> Content
+        @ViewBuilder
+        content: () -> Content
     ) -> some View {
+
         VStack(
             alignment: .leading,
             spacing: 16,
@@ -200,8 +267,12 @@ struct CommunityPickupView: View {
         )
         .padding(20)
         .background(
-            Color(.secondarySystemGroupedBackground),
-            in: RoundedRectangle(cornerRadius: 20)
+            Color(
+                .secondarySystemGroupedBackground
+            ),
+            in: RoundedRectangle(
+                cornerRadius: 20
+            )
         )
     }
 
@@ -209,15 +280,21 @@ struct CommunityPickupView: View {
         _ title: String,
         icon: String
     ) -> some View {
+
         HStack(spacing: 12) {
-            Image(systemName: icon)
-                .font(.headline)
-                .foregroundStyle(Color.accentColor)
-                .padding(10)
-                .background(
-                    Color.accentColor.opacity(0.12),
-                    in: Circle()
-                )
+            Image(
+                systemName: icon
+            )
+            .font(.headline)
+            .foregroundStyle(
+                Color.accentColor
+            )
+            .padding(10)
+            .background(
+                Color.accentColor
+                    .opacity(0.12),
+                in: Circle()
+            )
 
             Text(title)
                 .font(.headline)
@@ -228,52 +305,73 @@ struct CommunityPickupView: View {
         _ title: String,
         value: String
     ) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
+
+        VStack(
+            alignment: .leading,
+            spacing: 4
+        ) {
             Text(title)
                 .font(.subheadline)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(
+                    .secondary
+                )
 
             Text(value)
-                .font(.body.weight(.medium))
+                .font(
+                    .body.weight(.medium)
+                )
         }
     }
 
     private func unitDescription(
         _ item: SurplusItem
     ) -> String {
+
         switch item.quantityUnit {
+
         case .pieces:
-            item.quantity == 1 ? "piece" : "pieces"
+            return item.quantity == 1
+                ? "piece"
+                : "pieces"
 
         case .portions:
-            item.quantity == 1 ? "portion" : "portions"
+            return item.quantity == 1
+                ? "portion"
+                : "portions"
 
         case .packs:
-            item.quantity == 1 ? "pack" : "packs"
+            return item.quantity == 1
+                ? "pack"
+                : "packs"
 
         case .trays:
-            item.quantity == 1 ? "tray" : "trays"
+            return item.quantity == 1
+                ? "tray"
+                : "trays"
 
         case .kilograms:
-            "kg"
+            return "kg"
 
         case .litres:
-            "L"
+            return "L"
         }
     }
 
     private func storageDescription(
-        _ requirement: SurplusItem.StorageRequirement
+        _ requirement:
+            SurplusItem.StorageRequirement
     ) -> String {
+
         switch requirement {
+
         case .ambient:
-            "Room temperature"
+            return "Room temperature"
 
         case .refrigerated:
-            "Refrigerated"
+            return "Refrigerated"
 
         case .frozen:
-            "Frozen"
+            return "Frozen"
         }
     }
 }

@@ -84,6 +84,8 @@ struct ClaimPickupDetailsView: View {
                         detail("Pickup instructions", value: instructions)
                     }
                 }
+                
+
 
                 card {
                     heading("Surplus", icon: "basket")

@@ -37,7 +37,7 @@ final class SharePlateAppDependencies {
             contactName: "Business Manager",
             contactPhone: "0400 000 000",
             contactEmail: nil,
-            pickupAddress: "1 Local Street, Ultimo",
+            pickupAddress: "15 Broadway, Ultimo NSW 2007",
             pickupInstructions: nil
         )
 
