@@ -98,6 +98,54 @@ struct CoreDataSharePlateRepositoryTests {
         #expect(pickups == [pickup])
     }
 
+    @Test func donationPickupsAreRestrictedToCommunityOrganisationRelationship() async throws {
+        let fixture = try await makeFixture()
+        let ownListing = fixture.listing(status: .collected, endOffset: 3_600)
+        let otherListing = fixture.listing(status: .collected, endOffset: 7_200)
+        try await fixture.repository.saveSurplusListing(ownListing)
+        try await fixture.repository.saveSurplusListing(otherListing)
+
+        let ownClaim = fixture.claim(for: ownListing, status: .collected)
+        try await fixture.repository.saveRescueClaim(ownClaim)
+
+        let otherOrganisation = CommunityOrganisation(
+            organisationName: "Other Food Relief",
+            suburb: "Glebe",
+            isVerified: true,
+            contactName: "Taylor",
+            contactPhone: "0400 999 999",
+            serviceArea: "Inner West"
+        )
+        try await fixture.repository.saveCommunityOrganisation(otherOrganisation)
+        let otherClaim = RescueClaim(
+            surplusListingID: otherListing.id,
+            communityOrganisationID: otherOrganisation.id,
+            claimedAt: fixture.now,
+            plannedPickupAt: fixture.now.addingTimeInterval(1_800),
+            collectorName: "Taylor",
+            collectorPhone: "0400 999 999",
+            status: .collected
+        )
+        try await fixture.repository.saveRescueClaim(otherClaim)
+
+        let ownPickup = DonationPickup(
+            rescueClaimID: ownClaim.id,
+            collectedAt: fixture.now
+        )
+        let otherPickup = DonationPickup(
+            rescueClaimID: otherClaim.id,
+            collectedAt: fixture.now.addingTimeInterval(60)
+        )
+        try await fixture.repository.saveDonationPickup(ownPickup)
+        try await fixture.repository.saveDonationPickup(otherPickup)
+
+        let pickups = try await fixture.repository.donationPickups(
+            forCommunityOrganisationID: fixture.organisation.id
+        )
+
+        #expect(pickups == [ownPickup])
+    }
+
     private func makeFixture() async throws -> CoreDataRepositoryFixture {
         let stack = CoreDataStack(inMemory: true)
         try await stack.load()

@@ -21,6 +21,7 @@ struct ContentView: View {
 
     @State private var showClaimSurplus = false
     @State private var showCommunityPickup = false
+    @State private var showCommunityRescueHistory = false
 
     // MARK: - Selected Business Activity
 
@@ -389,6 +390,30 @@ struct ContentView: View {
                     )
                 }
             }
+
+            // MARK: - Community Rescue History
+
+            .navigationDestination(
+                isPresented:
+                    $showCommunityRescueHistory
+            ) {
+                CommunityRescueHistoryView(
+                    communityOrganisationID:
+                        communityOrganisation.id,
+                    viewModel:
+                        CommunityRescueHistoryViewModel(
+                            useCase:
+                                LoadCommunityRescueHistoryUseCase(
+                                    donationRepository:
+                                        repository,
+                                    claimRepository:
+                                        repository,
+                                    surplusRepository:
+                                        repository
+                                )
+                        )
+                )
+            }
         }
     }
 
@@ -472,6 +497,9 @@ struct ContentView: View {
             onSelectListing: { listing in
                 selectedAvailableListing = listing
                 showClaimSurplus = true
+            },
+            onViewRescueHistory: {
+                showCommunityRescueHistory = true
             }
         )
     }
@@ -633,6 +661,9 @@ struct ContentView: View {
             false
 
         showCommunityPickup =
+            false
+
+        showCommunityRescueHistory =
             false
     }
 }

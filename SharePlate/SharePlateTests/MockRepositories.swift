@@ -73,6 +73,7 @@ final class MockDonationRepository: DonationRepository {
     var savedPickups: [DonationPickup] = []
     // History is configured explicitly because pickups do not contain a business ID.
     var pickupHistoryByBusinessID: [UUID: [DonationPickup]] = [:]
+    var pickupHistoryByCommunityOrganisationID: [UUID: [DonationPickup]] = [:]
 
     func donationPickup(forRescueClaimID rescueClaimID: UUID) async throws -> DonationPickup? {
         pickups.first { $0.rescueClaimID == rescueClaimID }
@@ -86,5 +87,11 @@ final class MockDonationRepository: DonationRepository {
 
     func donationPickups(forFoodBusinessID foodBusinessID: UUID) async throws -> [DonationPickup] {
         pickupHistoryByBusinessID[foodBusinessID] ?? []
+    }
+
+    func donationPickups(
+        forCommunityOrganisationID communityOrganisationID: UUID
+    ) async throws -> [DonationPickup] {
+        pickupHistoryByCommunityOrganisationID[communityOrganisationID] ?? []
     }
 }

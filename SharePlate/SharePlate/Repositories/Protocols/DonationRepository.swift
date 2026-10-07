@@ -9,4 +9,9 @@ protocol DonationRepository {
 
     /// Returns completed pickups linked through their rescue claims and listings to the business.
     func donationPickups(forFoodBusinessID foodBusinessID: UUID) async throws -> [DonationPickup]
+
+    /// Returns completed pickups claimed by the specified community organisation.
+    func donationPickups(
+        forCommunityOrganisationID communityOrganisationID: UUID
+    ) async throws -> [DonationPickup]
 }

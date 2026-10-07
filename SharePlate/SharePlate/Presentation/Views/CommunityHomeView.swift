@@ -7,6 +7,7 @@ struct CommunityHomeView: View {
     let refreshID: UUID
     let onSelectPickup: (CommunityPickupActivity) -> Void
     let onSelectListing: (SurplusListing) -> Void
+    let onViewRescueHistory: () -> Void
 
     init(
         communityOrganisationID: UUID,
@@ -14,7 +15,8 @@ struct CommunityHomeView: View {
         availableSurplusViewModel: AvailableSurplusViewModel,
         refreshID: UUID,
         onSelectPickup: @escaping (CommunityPickupActivity) -> Void,
-        onSelectListing: @escaping (SurplusListing) -> Void
+        onSelectListing: @escaping (SurplusListing) -> Void,
+        onViewRescueHistory: @escaping () -> Void
     ) {
         self.communityOrganisationID = communityOrganisationID
         _pickupsViewModel = State(initialValue: pickupsViewModel)
@@ -22,6 +24,7 @@ struct CommunityHomeView: View {
         self.refreshID = refreshID
         self.onSelectPickup = onSelectPickup
         self.onSelectListing = onSelectListing
+        self.onViewRescueHistory = onViewRescueHistory
     }
 
     var body: some View {
@@ -30,6 +33,7 @@ struct CommunityHomeView: View {
                 header
                 pickupsSection
                 availableSurplusSection
+                rescueHistoryCard
             }
             .frame(maxWidth: 620)
             .padding(20)
@@ -40,6 +44,30 @@ struct CommunityHomeView: View {
         .navigationBarTitleDisplayMode(.inline)
         .refreshable { await refresh() }
         .task(id: refreshID) { await refresh() }
+    }
+
+    private var rescueHistoryCard: some View {
+        Button(action: onViewRescueHistory) {
+            card {
+                HStack(spacing: 14) {
+                    icon("clock.arrow.circlepath")
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Rescue History")
+                            .font(.headline)
+                            .foregroundStyle(.primary)
+                        Text("View completed food rescues")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityHint("Opens completed rescue history")
     }
 
     private var header: some View {

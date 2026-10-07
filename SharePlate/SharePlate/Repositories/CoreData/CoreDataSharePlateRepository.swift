@@ -285,6 +285,20 @@ final class CoreDataSharePlateRepository:
         }
     }
 
+    func donationPickups(
+        forCommunityOrganisationID communityOrganisationID: UUID
+    ) async throws -> [DonationPickup] {
+        try await context.perform {
+            let request = NSFetchRequest<NSManagedObject>(entityName: Entity.donationPickup)
+            request.predicate = NSPredicate(
+                format: "rescueClaim.communityOrganisation.id == %@",
+                communityOrganisationID as NSUUID
+            )
+            request.sortDescriptors = [NSSortDescriptor(key: "collectedAt", ascending: false)]
+            return try self.context.fetch(request).map(self.donationPickup(from:))
+        }
+    }
+
     // MARK: - Fetch and Save Helpers
 
     private func fetchOne(

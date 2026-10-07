@@ -84,5 +84,16 @@ final class DevelopmentSurplusRepository:
         )
         return pickups.values.filter { claimIDs.contains($0.rescueClaimID) }
     }
+
+    func donationPickups(
+        forCommunityOrganisationID communityOrganisationID: UUID
+    ) async throws -> [DonationPickup] {
+        let claimIDs = Set(
+            claims.values
+                .filter { $0.communityOrganisationID == communityOrganisationID }
+                .map(\.id)
+        )
+        return pickups.values.filter { claimIDs.contains($0.rescueClaimID) }
+    }
 }
 #endif
