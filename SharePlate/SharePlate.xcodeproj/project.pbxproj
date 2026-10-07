@@ -6,7 +6,30 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		45BFDB4D30763B8500F10621 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BFDB4C30763B8500F10621 /* WidgetKit.framework */; };
+		45BFDB4F30763B8500F10621 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BFDB4E30763B8500F10621 /* SwiftUI.framework */; };
+		45BFDB5E30763B8700F10621 /* SharePlateWidgetExtensionExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 45BFDB4A30763B8500F10621 /* SharePlateWidgetExtensionExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		45BFDB7530764AEB00F10621 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BFDB7430764AEB00F10621 /* UserNotifications.framework */; };
+		45BFDB7730764AEB00F10621 /* UserNotificationsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BFDB7630764AEB00F10621 /* UserNotificationsUI.framework */; };
+		45BFDB8130764AEC00F10621 /* SharePlateNotificationContentExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 45BFDB7330764AEB00F10621 /* SharePlateNotificationContentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		45BFDB5C30763B8700F10621 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45BE5EAE306F73CB00FB9715 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45BFDB4930763B8500F10621;
+			remoteInfo = SharePlateWidgetExtensionExtension;
+		};
+		45BFDB7F30764AEC00F10621 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 45BE5EAE306F73CB00FB9715 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 45BFDB7230764AEB00F10621;
+			remoteInfo = SharePlateNotificationContentExtension;
+		};
 		AABBCCDD0000000000000006 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 45BE5EAE306F73CB00FB9715 /* Project object */;
@@ -16,16 +39,61 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		45BFDB6330763B8700F10621 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				45BFDB8130764AEC00F10621 /* SharePlateNotificationContentExtension.appex in Embed Foundation Extensions */,
+				45BFDB5E30763B8700F10621 /* SharePlateWidgetExtensionExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		45BE5EB6306F73CB00FB9715 /* SharePlate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SharePlate.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		45BFDB4A30763B8500F10621 /* SharePlateWidgetExtensionExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SharePlateWidgetExtensionExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		45BFDB4C30763B8500F10621 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		45BFDB4E30763B8500F10621 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		45BFDB6E3076483700F10621 /* SharePlateWidgetExtensionExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SharePlateWidgetExtensionExtension.entitlements; sourceTree = "<group>"; };
+		45BFDB7330764AEB00F10621 /* SharePlateNotificationContentExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SharePlateNotificationContentExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		45BFDB7430764AEB00F10621 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		45BFDB7630764AEB00F10621 /* UserNotificationsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotificationsUI.framework; path = System/Library/Frameworks/UserNotificationsUI.framework; sourceTree = SDKROOT; };
 		AABBCCDD0000000000000001 /* SharePlateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = SharePlateTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		45BFDB6230763B8700F10621 /* Exceptions for "SharePlateWidgetExtension" folder in "SharePlateWidgetExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 45BFDB4930763B8500F10621 /* SharePlateWidgetExtensionExtension */;
+		};
+		45BFDB6C307641A800F10621 /* Exceptions for "SharePlate" folder in "SharePlateWidgetExtensionExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Shared/SharePlateWidgetSnapshot.swift,
+				Shared/SharePlateWidgetSnapshotStore.swift,
+			);
+			target = 45BFDB4930763B8500F10621 /* SharePlateWidgetExtensionExtension */;
+		};
+		45BFDB8530764AEC00F10621 /* Exceptions for "SharePlateNotificationContentExtension" folder in "SharePlateNotificationContentExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 45BFDB7230764AEB00F10621 /* SharePlateNotificationContentExtension */;
+		};
 		F0A1B2C3D4E5F60718293A4B /* Exceptions for "SharePlate" folder in "SharePlate" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Shared/.gitkeep,
+				Shared/Untitled.swift,
 			);
 			target = 45BE5EB5306F73CB00FB9715 /* SharePlate */;
 		};
@@ -36,8 +104,25 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				F0A1B2C3D4E5F60718293A4B /* Exceptions for "SharePlate" folder in "SharePlate" target */,
+				45BFDB6C307641A800F10621 /* Exceptions for "SharePlate" folder in "SharePlateWidgetExtensionExtension" target */,
 			);
 			path = SharePlate;
+			sourceTree = "<group>";
+		};
+		45BFDB5030763B8500F10621 /* SharePlateWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				45BFDB6230763B8700F10621 /* Exceptions for "SharePlateWidgetExtension" folder in "SharePlateWidgetExtensionExtension" target */,
+			);
+			path = SharePlateWidgetExtension;
+			sourceTree = "<group>";
+		};
+		45BFDB7830764AEB00F10621 /* SharePlateNotificationContentExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				45BFDB8530764AEC00F10621 /* Exceptions for "SharePlateNotificationContentExtension" folder in "SharePlateNotificationContentExtension" target */,
+			);
+			path = SharePlateNotificationContentExtension;
 			sourceTree = "<group>";
 		};
 		AABBCCDD0000000000000002 /* SharePlateTests */ = {
@@ -55,6 +140,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		45BFDB4730763B8500F10621 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45BFDB4F30763B8500F10621 /* SwiftUI.framework in Frameworks */,
+				45BFDB4D30763B8500F10621 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45BFDB7030764AEB00F10621 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				45BFDB7730764AEB00F10621 /* UserNotificationsUI.framework in Frameworks */,
+				45BFDB7530764AEB00F10621 /* UserNotifications.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AABBCCDD0000000000000004 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -68,8 +171,12 @@
 		45BE5EAD306F73CB00FB9715 = {
 			isa = PBXGroup;
 			children = (
+				45BFDB6E3076483700F10621 /* SharePlateWidgetExtensionExtension.entitlements */,
 				45BE5EB8306F73CB00FB9715 /* SharePlate */,
 				AABBCCDD0000000000000002 /* SharePlateTests */,
+				45BFDB5030763B8500F10621 /* SharePlateWidgetExtension */,
+				45BFDB7830764AEB00F10621 /* SharePlateNotificationContentExtension */,
+				45BFDB4B30763B8500F10621 /* Frameworks */,
 				45BE5EB7306F73CB00FB9715 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -79,8 +186,21 @@
 			children = (
 				45BE5EB6306F73CB00FB9715 /* SharePlate.app */,
 				AABBCCDD0000000000000001 /* SharePlateTests.xctest */,
+				45BFDB4A30763B8500F10621 /* SharePlateWidgetExtensionExtension.appex */,
+				45BFDB7330764AEB00F10621 /* SharePlateNotificationContentExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		45BFDB4B30763B8500F10621 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45BFDB4C30763B8500F10621 /* WidgetKit.framework */,
+				45BFDB4E30763B8500F10621 /* SwiftUI.framework */,
+				45BFDB7430764AEB00F10621 /* UserNotifications.framework */,
+				45BFDB7630764AEB00F10621 /* UserNotificationsUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -93,10 +213,13 @@
 				45BE5EB2306F73CB00FB9715 /* Sources */,
 				45BE5EB3306F73CB00FB9715 /* Frameworks */,
 				45BE5EB4306F73CB00FB9715 /* Resources */,
+				45BFDB6330763B8700F10621 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				45BFDB5D30763B8700F10621 /* PBXTargetDependency */,
+				45BFDB8030764AEC00F10621 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				45BE5EB8306F73CB00FB9715 /* SharePlate */,
@@ -107,6 +230,50 @@
 			productName = SharePlate;
 			productReference = 45BE5EB6306F73CB00FB9715 /* SharePlate.app */;
 			productType = "com.apple.product-type.application";
+		};
+		45BFDB4930763B8500F10621 /* SharePlateWidgetExtensionExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45BFDB5F30763B8700F10621 /* Build configuration list for PBXNativeTarget "SharePlateWidgetExtensionExtension" */;
+			buildPhases = (
+				45BFDB4630763B8500F10621 /* Sources */,
+				45BFDB4730763B8500F10621 /* Frameworks */,
+				45BFDB4830763B8500F10621 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				45BFDB5030763B8500F10621 /* SharePlateWidgetExtension */,
+			);
+			name = SharePlateWidgetExtensionExtension;
+			packageProductDependencies = (
+			);
+			productName = SharePlateWidgetExtensionExtension;
+			productReference = 45BFDB4A30763B8500F10621 /* SharePlateWidgetExtensionExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		45BFDB7230764AEB00F10621 /* SharePlateNotificationContentExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 45BFDB8230764AEC00F10621 /* Build configuration list for PBXNativeTarget "SharePlateNotificationContentExtension" */;
+			buildPhases = (
+				45BFDB6F30764AEB00F10621 /* Sources */,
+				45BFDB7030764AEB00F10621 /* Frameworks */,
+				45BFDB7130764AEB00F10621 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				45BFDB7830764AEB00F10621 /* SharePlateNotificationContentExtension */,
+			);
+			name = SharePlateNotificationContentExtension;
+			packageProductDependencies = (
+			);
+			productName = SharePlateNotificationContentExtension;
+			productReference = 45BFDB7330764AEB00F10621 /* SharePlateNotificationContentExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		AABBCCDD0000000000000008 /* SharePlateTests */ = {
 			isa = PBXNativeTarget;
@@ -142,6 +309,12 @@
 					45BE5EB5306F73CB00FB9715 = {
 						CreatedOnToolsVersion = 26.2;
 					};
+					45BFDB4930763B8500F10621 = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					45BFDB7230764AEB00F10621 = {
+						CreatedOnToolsVersion = 26.2;
+					};
 				};
 			};
 			buildConfigurationList = 45BE5EB1306F73CB00FB9715 /* Build configuration list for PBXProject "SharePlate" */;
@@ -160,12 +333,28 @@
 			targets = (
 				AABBCCDD0000000000000008 /* SharePlateTests */,
 				45BE5EB5306F73CB00FB9715 /* SharePlate */,
+				45BFDB4930763B8500F10621 /* SharePlateWidgetExtensionExtension */,
+				45BFDB7230764AEB00F10621 /* SharePlateNotificationContentExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		45BE5EB4306F73CB00FB9715 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45BFDB4830763B8500F10621 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45BFDB7130764AEB00F10621 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -189,6 +378,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		45BFDB4630763B8500F10621 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		45BFDB6F30764AEB00F10621 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AABBCCDD0000000000000003 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -199,6 +402,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		45BFDB5D30763B8700F10621 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45BFDB4930763B8500F10621 /* SharePlateWidgetExtensionExtension */;
+			targetProxy = 45BFDB5C30763B8700F10621 /* PBXContainerItemProxy */;
+		};
+		45BFDB8030764AEC00F10621 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 45BFDB7230764AEB00F10621 /* SharePlateNotificationContentExtension */;
+			targetProxy = 45BFDB7F30764AEC00F10621 /* PBXContainerItemProxy */;
+		};
 		AABBCCDD0000000000000007 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 45BE5EB5306F73CB00FB9715 /* SharePlate */;
@@ -331,8 +544,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SharePlate/SharePlate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L28R5P789P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -362,8 +577,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = SharePlate/SharePlate.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L28R5P789P;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -388,11 +605,130 @@
 			};
 			name = Release;
 		};
+		45BFDB6030763B8700F10621 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SharePlateWidgetExtensionExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L28R5P789P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SharePlateWidgetExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SharePlateWidgetExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlate.SharePlateWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		45BFDB6130763B8700F10621 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = SharePlateWidgetExtensionExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L28R5P789P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SharePlateWidgetExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SharePlateWidgetExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlate.SharePlateWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		45BFDB8330764AEC00F10621 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L28R5P789P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SharePlateNotificationContentExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SharePlateNotificationContentExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlate.SharePlateNotificationContentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		45BFDB8430764AEC00F10621 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = L28R5P789P;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SharePlateNotificationContentExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SharePlateNotificationContentExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlate.SharePlateNotificationContentExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		AABBCCDD0000000000000009 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = L28R5P789P;
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -408,6 +744,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = L28R5P789P;
 				GENERATE_INFOPLIST_FILE = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = uts.edu.au.SharePlateTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -435,6 +772,24 @@
 			buildConfigurations = (
 				45BE5EC2306F73CD00FB9715 /* Debug */,
 				45BE5EC3306F73CD00FB9715 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45BFDB5F30763B8700F10621 /* Build configuration list for PBXNativeTarget "SharePlateWidgetExtensionExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45BFDB6030763B8700F10621 /* Debug */,
+				45BFDB6130763B8700F10621 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		45BFDB8230764AEC00F10621 /* Build configuration list for PBXNativeTarget "SharePlateNotificationContentExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				45BFDB8330764AEC00F10621 /* Debug */,
+				45BFDB8430764AEC00F10621 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

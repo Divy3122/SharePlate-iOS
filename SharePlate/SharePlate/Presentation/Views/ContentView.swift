@@ -49,6 +49,12 @@ struct ContentView: View {
     private let repository:
         any SharePlateRepository
 
+    private let widgetSyncService:
+        SharePlateWidgetSyncService
+
+    private let notificationService:
+        SharePlateNotificationService
+
     @State private var businessDashboardViewModel:
         BusinessDashboardViewModel
 
@@ -72,6 +78,8 @@ struct ContentView: View {
         )
 
         repository = dependencies.repository
+        widgetSyncService = dependencies.widgetSyncService
+        notificationService = dependencies.notificationService
 
         _businessDashboardViewModel = State(
             initialValue:
@@ -187,6 +195,8 @@ struct ContentView: View {
                         communityRefreshID =
                             UUID()
 
+                        refreshWidget()
+
                         showEstimateSurplus =
                             false
                     }
@@ -225,6 +235,8 @@ struct ContentView: View {
 
                             communityRefreshID =
                                 UUID()
+
+                            refreshWidget()
 
                             showFinaliseSurplus =
                                 false
@@ -288,7 +300,13 @@ struct ContentView: View {
                                             repository
                                     )
                             ),
-                        onCompleted: { _ in
+                        onCompleted: { completedPickup in
+
+                            scheduleRescueNotification(
+                                eventType: "Pickup completed",
+                                listing: listing,
+                                pickupDate: completedPickup.collectedAt
+                            )
 
                             selectedBusinessListing =
                                 nil
@@ -307,6 +325,8 @@ struct ContentView: View {
 
                             communityRefreshID =
                                 UUID()
+
+                            refreshWidget()
                         }
                     )
                 }
@@ -579,6 +599,8 @@ struct ContentView: View {
 
         communityRefreshID =
             UUID()
+
+        refreshWidget(for: role)
     }
 
     private func switchProfile() {
@@ -622,8 +644,51 @@ struct ContentView: View {
         communityRefreshID =
             UUID()
 
+        refreshWidget()
+
+        scheduleRescueNotification(
+            eventType: "Pickup confirmed",
+            listing: claimedListing,
+            pickupDate: claim.plannedPickupAt
+        )
+
         showCommunityPickup =
             true
+    }
+
+    // MARK: - Local Notifications
+
+    private func scheduleRescueNotification(
+        eventType: String,
+        listing: SurplusListing,
+        pickupDate: Date
+    ) {
+        Task {
+            await notificationService.scheduleRescueUpdate(
+                eventType: eventType,
+                listingTitle: listing.title,
+                pickupDate: pickupDate,
+                pickupAddress: listing.pickupAddress
+            )
+        }
+    }
+
+    // MARK: - Widget Sync
+
+    private func refreshWidget(
+        for role: SharePlateRole? = nil
+    ) {
+        guard let role = role ?? selectedRole else {
+            return
+        }
+
+        Task {
+            await widgetSyncService.refresh(
+                role: role,
+                foodBusinessID: foodBusinessID,
+                communityOrganisationID: communityOrganisation.id
+            )
+        }
     }
 
     // MARK: - Navigation Reset
